@@ -3,6 +3,8 @@ OP.GG와 롤 클라이언트를 연동해 룬복사,자동 멀티서치등. OP.G
 
 ### 사용언어 : C/C++, QML, JS 
 
+### 배포판 다운로드 : https://drive.google.com/open?id=1V7jXsV4Y1ns3x3UC7WVzVXPBmHFxMuAn
+
 ### 코드 종속성
 1. QT 5.12.5 이상 (프레임워크)
 2. MSVC 2015 이상 (컴파일러) > Mingw로 컴파일은 불가능합니다.
