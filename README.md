@@ -13,8 +13,9 @@ OP.GG와 롤 클라이언트를 연동해 룬복사,자동 멀티서치등. OP.G
 - lcu.h/cpp : LCU API (https://riot-api-libraries.readthedocs.io/en/latest/lcu.html) > 롤 클라이언트 연동
 - datadragon.h/cpp : Data Dragon API (https://developer.riotgames.com/docs/lol#data-dragon) > 롤 정적 데이터 API
 
-### 기능
+### 핵심 기능
 - op.gg 챔피언 분석페이지의 룬페이지를 롤 클라이언트로 복사
 - 롤 클라이언트 매칭시, 픽창연동 및 자동 멀티서치
+- 기타 편의기능 등
 
 ![runeCopy](https://user-images.githubusercontent.com/45027993/82983614-62cf1d80-a02b-11ea-94b4-d085744aab8c.png)
