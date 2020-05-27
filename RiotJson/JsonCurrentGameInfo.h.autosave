@@ -1,0 +1,52 @@
+#ifndef JSONCURRENTGAMEINFO_H
+#define JSONCURRENTGAMEINFO_H
+
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QVariant>
+
+namespace riot {
+class CurrentInfo : public QJsonObject
+{
+public:
+    // The ID of the game
+    long gameId() const { return long(this->value("gameId").toVariant().toLongLong()); }
+    void setGmaeId(long gameId) { this->insert("gameId", qlonglong(gameId)); }
+
+    // The game type
+    QString gameType() const { return this->value("gameType").toString(); }
+    void setGameType(const QString &gameType) { this->insert("gameType", gameType); }
+
+    // The game start time represented in epoch milliseconds
+    long gameStartTime() const { return long(this->value("gameStartTime").toVariant().toLongLong()); }
+    void setGameStartTime(long gameStartTime) { this->insert("gameStartTime", qlonglong(gameStartTime)); }
+    
+    // The ID of the map
+    long mapId() const { return long(this->value("mapId").toVariant().toLongLong()); }
+    void setMapId(long mapId) { this->insert("mapId", qlonglong(mapId)); }
+    
+    // The amount of time in seconds that has passed since the game started
+    long gameLength() const { return long(this->value("gameLength").toVariant().toLongLong()); }
+    void setGameLength(long gameLength) { this->insert("gameLength", qlonglong(gameLength)); }
+    
+    // The ID of the platform on which the game is being played
+    QString platformId() const { return this->value("gameType").toString(); }
+    void setPlatformId(const QString &platformId) { this->insert("platformId", platformId); }
+    
+    // The game mode
+    QString gameMode() const { return this->value("gameMode").toString(); }
+    void setGameMode(const QString &gameMode) { this->insert("gameMode", gameMode); }
+    
+    // The queue type (queue types are documented on the Game Constants page)
+    long gameQueueConfigId() const { return long(this->value("gameQueueConfigId").toVariant().toLongLong()); }
+    void setGameQueueConfigId(long gameQueueConfigId) { this->insert("gameQueueConfigId", qlonglong(gameQueueConfigId)); }
+    
+
+//    bannedChampions	List[BannedChampion]	Banned champion information
+//    observers	Observer	The observer information
+//    participants	List[CurrentGameParticipant]	The participant information
+
+};
+}
+
+#endif // JSONCURRENTGAMEINFO_H

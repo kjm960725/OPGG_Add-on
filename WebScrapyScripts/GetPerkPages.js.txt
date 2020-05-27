@@ -1,0 +1,30 @@
+var perkPages = document.getElementsByClassName('perk-page-wrap');
+var champName = document.getElementsByClassName('champion-stats-header-info__name')[0].innerText
+var result = new Array
+for (let i = 0; i < perkPages.length; ++i) 
+{
+    var perkPage = perkPages[i]
+    var perkPageName = document.getElementsByClassName('champion-stats-summary-rune__name')[i < 2 ? 0 : 1].innerText
+    var pri = perkPage.getElementsByClassName('perk-page')[0]
+    var priArr = pri.getElementsByTagName('img')[0].src.split('/')
+    var sub = perkPage.getElementsByClassName('perk-page')[1]
+    var subArr = sub.getElementsByTagName('img')[0].src.split('/')
+    var imgs = perkPage.getElementsByTagName('img')
+    var object = 
+    {
+        name: 'OP.GG:' + champName + ':' + perkPageName.replace(/(\s*)/g, ""), 
+        primaryStyleId: priArr[priArr.length-1].split('.')[0], 
+        subStyleId: subArr[subArr.length-1].split('.')[0], 
+        selectedPerkIds:[],
+    };
+    
+    for (var img of imgs)
+    {    
+        if (img.src.includes('perkStyle')) continue;    
+        var arr = img.src.split('/');    
+        var val = arr[arr.length - 1];    
+        if (!val.includes('grayscale')) object.selectedPerkIds.push(val.split('.')[0]);
+    }
+    result.push(object)
+}
+JSON.stringify(result);

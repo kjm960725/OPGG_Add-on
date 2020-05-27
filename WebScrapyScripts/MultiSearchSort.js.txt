@@ -1,0 +1,26 @@
+﻿function reg(string) 
+{
+    return String(string).replace(/(\s*)/g, "").toLowerCase();
+};
+
+function indexOfInnerText(elements, text) 
+{
+    for (var i in elements) {
+        if (reg(elements[i].innerText) === reg(text))
+            return Number(i);
+    } return Number(-1);
+};
+
+var sortNames =  _sortNameArgs;
+var multiTable = document.getElementsByClassName("multi2__item");
+var summonersByHTML = document.getElementsByClassName("name");
+for (var i = 0; i < sortNames.length && i < multiTable.length && summonersByHTML.length; ++i) {
+    if (sortNames[i] === null)
+        break;
+    var index = indexOfInnerText(summonersByHTML, sortNames[i]);
+    if (index < 0 || index === i) continue;
+    const clone1 = multiTable[i].cloneNode(true);
+    const clone2 = multiTable[index].cloneNode(true);
+    multiTable[i].innerHTML = clone2.innerHTML;
+    multiTable[index].innerHTML = clone1.innerHTML;
+};

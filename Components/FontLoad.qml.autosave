@@ -1,0 +1,28 @@
+import QtQuick 2.0
+
+QtObject {
+//    readonly property string nanumB: nanumB.name
+//    readonly property string nanumR: nanumR.name
+//    readonly property string nanumL: nanumL.name
+//    readonly property string nanumEB: nanumEB.name
+    FontLoader {
+        id: nanumB
+//        name: 'NanumSquareB'
+        source: 'qrc:/Fonts/NanumSquareB.ttf'
+    }
+    FontLoader {
+        id: nanumR
+//        name: 'NanumSquareR'
+        source: 'qrc:/Fonts/NanumSquareR.ttf'
+    }
+    FontLoader {
+        id: nanumL
+        name: 'NanumSquareL'
+        source: 'qrc:/Fonts/NanumSquareL.ttf'
+    }
+    FontLoader {
+        id: nanumEB
+        name: 'NanumSquareEB'
+        source: 'qrc:/Fonts/NanumSquareEB.ttf'
+    }
+}

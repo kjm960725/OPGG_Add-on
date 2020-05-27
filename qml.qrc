@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Components/ChampIcon.qml</file>
+        <file>Components/ChampIconsView.qml</file>
+        <file>Fonts/NanumSquareB.ttf</file>
+        <file>Fonts/NanumSquareEB.ttf</file>
+        <file>Fonts/NanumSquareL.ttf</file>
+        <file>Fonts/NanumSquareR.ttf</file>
+        <file>Fonts/Fonts.qml</file>
+        <file>Components/MainWindow.qml</file>
+        <file>ICons/MaximizeIcon.png</file>
+        <file>ICons/MinimizeIcon.png</file>
+        <file>ICons/QuitIcon.png</file>
+        <file>ICons/WindowIcon.png</file>
+        <file>Pages/ChampSelectPage.qml</file>
+        <file>ICons/LeftArrowIcon.png</file>
+        <file>ICons/RIcon.png</file>
+        <file>ICons/HomeIcon.png</file>
+        <file>ICons/CopyIcon.png</file>
+        <file>Components/SpellIcon.qml</file>
+        <file>Components/SpellIconView.qml</file>
+        <file>ICons/RefrashIcon.png</file>
+        <file>ICons/RightArrowIcon.png</file>
+        <file>Components/TitleBar.qml</file>
+        <file>Components/ChampSelectElement.qml</file>
+        <file>Components/ChampSelectView.qml</file>
+        <file>Components/PushPopup.qml</file>
+        <file>Pages/HelpPopup.qml</file>
+        <file>Components/WebViewForOPGG.qml</file>
+        <file>WebScrapyScripts/GetPerkPages.js.txt</file>
+        <file>WebScrapyScripts/MultiSearchSort.js.txt</file>
+    </qresource>
+</RCC>
