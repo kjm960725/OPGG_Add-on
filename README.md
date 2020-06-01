@@ -20,7 +20,7 @@ OP.GG와 롤 클라이언트를 연동해 룬복사,자동 멀티서치등. OP.G
 
 
 ### 외부 라이브러리
-- 3rdarty/QGumboParser : [gumbo-parser](https://github.com/google/gumbo-parser) > C++ HTML 파서
+- 3rdparty/QGumboParser : [gumbo-parser](https://github.com/google/gumbo-parser) > C++ HTML 파서
 
 
 # 핵심 기능
