@@ -65,7 +65,7 @@ Rectangle {
                 font.family: fontFamily
                 color: "#ffffff"
                 font.pixelSize: 12
-                text: root.position + '정글'
+                text: root.position
             }
             Item {
                 Behavior on scale { NumberAnimation { duration: 50 } }
