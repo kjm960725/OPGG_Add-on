@@ -10,12 +10,32 @@ Item {
     signal clickedRefrash()
     signal clickedSummoner(var name);
     signal clickedCopy()
+    signal clickedSetting()
 
     Row {
 
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+        Rectangle {
+            width: 50
+            height: parent.height
+            color: settingArea.containsMouse ? '#44ffffff' : '#00000000'
+            Image {
+                width: 18
+                height: 18
+                id: settingImage
+                source: 'qrc:/ICons/SettingIcon.png'
+                anchors.centerIn: parent
+                fillMode: Image.PreserveAspectFit
+            }
+            MouseArea {
+                id: settingArea
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: clickedSetting()
+            }
+        }
         Rectangle {
             width: 50
             height: parent.height
@@ -115,7 +135,7 @@ Item {
         Text {
             id: commentText
             width: contentWidth + 20
-            text: qsTr('이 프로그램은 OP.GG와 관련이 없는 개인 프로젝트입니다. (made by 청산가리중독자)\t버그제보/기타문의 : %1').arg('kjm960725@gmail.com')
+            text: qsTr('이 프로그램은 OPGG(회사)와 관련이 없습니다.   버그제보/기타문의 : %1').arg('kjm960725@gmail.com')
             font.family: fonts.nanumR
             color: '#aaffffff'
             anchors.verticalCenter: parent.verticalCenter

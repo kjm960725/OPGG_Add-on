@@ -19,8 +19,15 @@ Item {
     signal clickedChampIcon(var id)
     signal clickedMultySearch(var names)
 
+    // Element Signals
+    signal complateChanged(var element)
+    signal inProgressChanged(var element)
+    signal champInfoChanged(var element)
+
     width: 220
     visible: count > 0
+
+    function itemAt(index) { return teamRepeater.itemAt(index) }
 
     function clear() {
         session = null
@@ -41,7 +48,9 @@ Item {
         riotLCU.getChampSelectSession(function(object, err, errStr){
             if (err === 0) {
                 root.inGameSession = null
-                root.session = object
+
+                if (JSON.stringify(root.session) !== JSON.stringify(object))
+                    root.session = object
             }
         })
     }
@@ -118,8 +127,6 @@ Item {
                 Behavior on scale { NumberAnimation { duration: 50 } }
             }
         }
-        Timer {
-        }
 
         Repeater {
             id: teamRepeater
@@ -169,6 +176,7 @@ Item {
                     }
                     return null
                 }
+                onChampInfoChanged: root.champInfoChanged(this)
                 complate: {
                     if (session !== null && session[team] !== null) {
                         var action = findPickAction(session[team][index].cellId)
@@ -176,6 +184,7 @@ Item {
                     }
                     return true
                 }
+                onComplateChanged: root.complateChanged(this)
                 inProgress: {
                     if (session !== null && session[team] !== null) {
                         var action = findPickAction(session[team][index].cellId)
@@ -183,6 +192,7 @@ Item {
                     }
                     return false
                 }
+                onInProgressChanged: root.inProgressChanged(this)
                 isAllyAction: {
                     if (session !== null && session[team] !== null) {
                         var action = findPickAction(session[team][index].cellId)

@@ -1,0 +1,7 @@
+#ifndef QGUMBOPARSER_H
+#define QGUMBOPARSER_H
+#include <src/QGumboParser/HtmlTag.h>
+#include <src/QGumboParser/qgumboattribute.h>
+#include <src/QGumboParser/qgumbodocument.h>
+#include <src/QGumboParser/qgumbonode.h>
+#endif // QGUMBOPARSER_H

@@ -14,6 +14,11 @@ WebEngineView {
     signal downloadStarted(var path)
     signal downloadComplated(var path)
 
+    function multiSearch(summonerNames) {
+        multiSearchNames = summonerNames
+        url = opggURL + '/multi/query=' + summonerNames.join(',')
+    }
+
     function sortMultiSearchSummoner(summonerNames) {
         if (summonerNames.length < 1 || loading || !String(url).includes('www.op.gg/multi/query=')) return
         runJavaScript(challenge.readFile(':/WebScrapyScripts/MultiSearchSort.js.txt').replace("_sortNameArgs", JSON.stringify(summonerNames)), function(result){})
