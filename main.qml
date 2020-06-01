@@ -4,8 +4,10 @@ import QtQuick.Layouts 1.0
 import Riot 1.0
 import 'Components'
 import 'Fonts'
+import 'Pages'
 import QtWebEngine 1.8
 import Clipboard 1.0
+import Qt.labs.settings 1.0
 
 MainWindow {
     id: window
@@ -19,31 +21,66 @@ MainWindow {
     borderColor: '#000000'
     borderWidth: 1
 
+
     property WebEngineView webView: null
+    property SettingsPopup settingsPopup: null
 
     Fonts { id: fonts; }
     PushPopup { id: push; fontFamily: fonts.nanumR }
 
-    Component.onCompleted: {
-        if (!supportSsl)
-            push.show('SSL 오류 발생', sslVersion, 10000)
-    }
-
     titleItem: TitleBar {
         Clipboard { id:clip; }
-        onClickedHome: webView.url = 'https://www.op.gg/'
+        onClickedHome: webView.url = opggURL
         onClickedNext: webView.goForward()
         onClickedPrevious: webView.goBack()
         onClickedRefrash: webView.reload()
-        onClickedSummoner: webView.url = 'https://www.op.gg/summoner/userName=' + name
+        onClickedSummoner: webView.url = opggURL + '/summoner/userName=' + name
+        onClickedSetting: settingsPopup.open()
         onClickedCopy: {
             clip.setText(String(webView.url))
             push.show(qsTr('링크 복사'),qsTr('현재 페이지의 링크가 클립보드에 복사되었습니다.\n\n(%1)').arg(String(webView.url)),3000)
         }
     }
 
-
     content: Item {
+
+        SettingsPopup {
+            id: settingsPopup
+            Component.onCompleted: window.settingsPopup = this
+            Settings {
+                id: settings
+                property bool inChampSessionAction: true // true:픽창 진입시 아군 멀티서치
+                property bool inGameSessionAction: true // true:인게임 진입시 적군 멀티서치
+                property bool selectionChampAction: false // true:챔피언 선택시 OP.GG 챔피언 페이지로 이동
+            }
+        }
+        Shortcut { sequence: 'F1'; onActivated: {
+                var view = teams.itemAt(0)
+                if (view.count > 0) {
+                    webView.multiSearch(view.getEnableSummonerNames())
+                }
+            }
+        }
+        Shortcut { sequence: 'F2'; onActivated: {
+                var view = teams.itemAt(1)
+                if (view.count > 0) {
+                    webView.multiSearch(view.getEnableSummonerNames())
+                }
+            }
+        }
+        Shortcut { sequence: 'F3'; onActivated:  webView.url = opggURL + '/summoner/userName=' + challenge.currentSummoner.displayName }
+        Shortcut { sequence: 'F4'; onActivated:  { // 자신이 픽창으로 선택한 챔피언 분석 페이지로 이동
+                var view = teams.itemAt(0)
+                for (var i = 0; i < view.count; ++i) {
+                    var element = view.itemAt(i)
+                    if (element.summonerName === challenge.currentSummoner.displayName && element.champInfo !== null) {
+                        webView.url = opggURL + '/champion/' + element.champInfo.id.toLowerCase()
+                        break;
+                    }
+                }
+            }
+        }
+
         Popup {
             id: info
             closePolicy: Popup.CloseOnReleaseOutside
@@ -58,8 +95,8 @@ MainWindow {
             ColumnLayout {
                 visible: teams.champCount
                 Layout.fillHeight: true
-                Layout.maximumWidth: 220
-                Layout.minimumWidth: 220
+                Layout.maximumWidth: 240
+                Layout.minimumWidth: 240
                 Repeater {
                     id: teams
                     model: 2
@@ -81,18 +118,24 @@ MainWindow {
                         fontFamily: fonts.nanumR
                         riotLCU: lcu
                         team: index === 0 ? 'myTeam' : 'theirTeam'
-                        onClickedChampIcon: webView.url = 'https://www.op.gg/champion/' + id.toLowerCase()
-                        onClickedSummonerName: webView.url = 'https://www.op.gg/summoner/userName=' + name
-                        onClickedMultySearch: {
-                            webView.multiSearchNames = names
-                            webView.url = 'https://www.op.gg/multi/query=' + names.join(',')
+                        onClickedChampIcon: webView.url = opggURL + '/champion/' + id.toLowerCase()
+                        onClickedSummonerName: webView.url = opggURL + '/summoner/userName=' + name
+                        onClickedMultySearch: webView.multiSearch(names)
+                        onComplateChanged: {
+                            if (!settings.selectionChampAction)
+                                return
+                            if (element.summonerName === challenge.currentSummoner.displayName && element.champInfo !== null && element.complate) {
+                                webView.url = opggURL + '/champion/' + element.champInfo.id.toLowerCase()
+                            }
                         }
                     }
                 }
 
                 Timer {
                     running: challenge.currentGameflowState === LCU.ChampSelect; repeat: true; interval: 500
-                    onTriggered: teams.releaseChampSelectViews()
+                    onTriggered: {
+                        teams.releaseChampSelectViews()
+                    }
                 }
                 Connections {
                     target: challenge
@@ -127,6 +170,7 @@ MainWindow {
                 Component.onCompleted: window.webView = this
                 fontFamily: fonts.nanumR
                 eventPush: push
+                onUrlChanged: console.info('webView.urlChanged :',url)
                 onDownloadComplated: {
                     if (obs.isObserverFile(path)) {
                         obs.runProcess(path, function(exitCode){
@@ -143,6 +187,7 @@ MainWindow {
                     onCurrentGameflowStateChanged: {
                         switch(challenge.currentGameflowState) {
                         case LCU.ChampSelect:
+                            if (!settings.inChampSessionAction) break;
                             lcu.getChampSelectSession(function(object, err, errStr){
                                 if (object === null) return
 
@@ -165,13 +210,12 @@ MainWindow {
                                     for (let i in array)
                                         summonerNames.push(array[i].displayName)
 
-
-                                    webView.multiSearchNames = summonerNames
-                                    webView.url = 'https://www.op.gg/multi/query=' + summonerNames.join(',')
+                                    webView.multiSearch(summonerNames)
                                 })
                             })
                             break;
                         case LCU.InProgress:
+                            if (!settings.inGameSessionAction) break;
                             lcu.getGameSession(function(object, err, errStr){
                                 if (object === null) return
 
@@ -195,8 +239,7 @@ MainWindow {
 
                                 if (summonerNames.length === 0) return
 
-                                webView.multiSearchNames = summonerNames
-                                webView.url = 'https://www.op.gg/multi/query=' + summonerNames.join(',')
+                                webView.multiSearch(summonerNames)
                             })
                             break;
                         default:

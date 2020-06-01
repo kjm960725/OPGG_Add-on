@@ -1,4 +1,4 @@
-#ifndef DATADRAGON_H
+﻿#ifndef DATADRAGON_H
 #define DATADRAGON_H
 
 #include <QObject>
@@ -30,12 +30,11 @@ class DataDragon : public QObject
     Q_PROPERTY(QJsonObject allProfileiconsInfo READ allProfileiconsInfo NOTIFY allProfileiconsInfoChanged)
     Q_PROPERTY(QJsonObject allMissionAssetsInfo READ allMissionAssetsInfo NOTIFY allMissionAssetsInfoChanged)
     Q_PROPERTY(QJsonObject allMapsInfo READ allMapsInfo NOTIFY allMapsInfoChanged)
-    Q_PROPERTY(bool isUpdating READ isUpdating NOTIFY isUpdatingChanged)
 
     Q_PROPERTY(QString getChampionIconDirPath READ getChampionIconDirPath NOTIFY versionChanged)
 public:
     enum Language {
-        ko_KR , // Korean (Korea) [Default]
+        ko_KR = 0, // Korean (Korea) [Default]
         cs_CZ , // Czech (Czech Republic)
         el_GR , // Greek (Greece)
         pl_PL , // Polish (Poland)
@@ -87,7 +86,6 @@ public:
 
     void setClinet(QNetworkAccessManager *clinet);
 
-    // DataDragon api version managemant
     void dataDragonVersionCheck(std::function<void(int, QString)>finishedCallback);
 
     // DataDragon version
@@ -96,8 +94,6 @@ public:
     // default language
     Language language() const;
     void setLanguage(Language language);
-
-    Q_INVOKABLE static QString getDataDragonPath();
 
     // get info from member (memory)
     QJsonObject allChampionsInfo() const { return mAllChampionsInfo; }
@@ -109,6 +105,7 @@ public:
     QJsonObject allMissionAssetsInfo() const { return mAllMissionAssetsInfo; }
     QJsonObject allMapsInfo() const { return mAllMapsInfo; }
 
+    Q_INVOKABLE static QString getDataDragonPath();
     Q_INVOKABLE QJsonObject getChampByKey(int key) const;
 
     // get champion image file path
@@ -118,12 +115,7 @@ public:
     Q_INVOKABLE QString getChampionSplashImagePath(const QString &championName, int skinNum = 0) const;
     Q_INVOKABLE QString getChampionTilesImagePath(const QString &championName, int skinNum = 0) const;
 
-    bool isUpdating() const;
-
 signals:
-    void isUpdatingChanged();
-    void updateFinished(int exit); // 0 : successed , other : failed
-
     void versionChanged();
     void languageChanged();
     void allChampionsInfoChanged();
@@ -139,9 +131,6 @@ private:
     QString mVersion;
     void setVersion(const QString &version);
 
-    bool mIsUpdating = false;
-    void setIsUpdating(bool isUpdating);
-    // get info from local file
     void getAllChampionsInfo(const QString &version, Language language, std::function<void(const QJsonObject &)>callback) ;
     void getAllChampionsDetailInfo(const QString &version, Language language, std::function<void(const QJsonObject &)>callback);
     void getAllItemsInfo(const QString &version, Language language, std::function<void(const QJsonObject &)>callback);
@@ -181,13 +170,15 @@ private:
 
     static QString getLanguageString(Language language);
 
-
-     // remove the old versions and init the json members
     void initDataDragon();
-
 
     void getNewestVersion(std::function<void(QString, int, QString)>VersionAndErrAndErrStr) const;
     void getAllVersions(std::function<void(const QJsonArray &, int, QString)>VersionsAndErrAndErrStr) const;
+
+
+
+
+    // ----- 아래 함수는 삭제 예정 -----------
 
     // donwload DataDragon.tgz
     void getDataDragon(const QString &version, const QString &downlaodPath,

@@ -34,6 +34,9 @@ public:
     LCU::GameflowState currentGameflowState() const;
     QJsonObject currentSummoner() const;
 
+    Q_INVOKABLE void getChampRateByOPGG(const QString &summonerName, const QJSValue &callback) const;
+
+
 
 signals:
     void currentGameflowStateChanged();

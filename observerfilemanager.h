@@ -9,6 +9,7 @@ class ObserverFileManager : public QObject
 {
     Q_OBJECT
 public:
+    // OP.GG 관전 파일 정보
     explicit ObserverFileManager(QObject *parent = nullptr);
     static void runProcess(const QString &filePath, std::function<void(int)>exitCallback);
     Q_INVOKABLE static void runProcess(const QString &filePath, const QJSValue &exitCallback);

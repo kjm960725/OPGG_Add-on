@@ -41,7 +41,7 @@ public:
     };
     Q_ENUM(RoutingFlatform)
 
-    void setJSEngine(QJSEngine *engine); // If you call the API from QML, use it.
+    void setJSEngine(QJSEngine *engine); // QML 사용시 반드시 설정.
 
     QNetworkAccessManager *client() const;
     void setClient(QNetworkAccessManager *client);

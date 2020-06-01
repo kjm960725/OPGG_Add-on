@@ -1,4 +1,4 @@
-#include "datadragon.h"
+﻿#include "datadragon.h"
 #include <QMetaEnum>
 #include <QTimer>
 #include <QDir>
@@ -16,7 +16,7 @@ DataDragon::DataDragon(UseDataFlag flag, QObject *parent)
     : QObject(parent)
     , mUseMemberFlag(flag)
 {
-
+    dataDragonVersionCheck([=](int err, QString errStr){err = 0; errStr = "";});
 }
 
 DataDragon::DataDragon(QNetworkAccessManager *client, UseDataFlag flag, QObject *parent)
@@ -24,7 +24,7 @@ DataDragon::DataDragon(QNetworkAccessManager *client, UseDataFlag flag, QObject 
     , mUseMemberFlag(flag)
     , mClinet(client)
 {
-
+    dataDragonVersionCheck([=](int err, QString errStr){err = 0; errStr = "";});
 }
 
 DataDragon::DataDragon(QNetworkAccessManager *client, DataDragon::Language language, UseDataFlag flag, QObject *parent)
@@ -33,6 +33,7 @@ DataDragon::DataDragon(QNetworkAccessManager *client, DataDragon::Language langu
     , mClinet(client)
 {
     setLanguage(language);
+    dataDragonVersionCheck([=](int err, QString errStr){err = 0; errStr = "";});
 }
 
 void DataDragon::dataDragonVersionCheck(std::function<void(int, QString)>finishedCallback)
@@ -43,8 +44,8 @@ void DataDragon::dataDragonVersionCheck(std::function<void(int, QString)>finishe
             QTimer::singleShot(2000, this,[this, finishedCallback](){dataDragonVersionCheck(finishedCallback);});
             return;
         }
+        qInfo() << QString("DataDragon::dataDragonVersionCheck - version:%1").arg(version).toStdString().data();
         this->setVersion(version);
-        initDataDragon();
         finishedCallback(0, "");
     });
 }
@@ -52,7 +53,9 @@ void DataDragon::dataDragonVersionCheck(std::function<void(int, QString)>finishe
 QString DataDragon::getLanguageString(DataDragon::Language language)
 {
     QMetaEnum metaEnum = QMetaEnum::fromType<DataDragon::Language>();
-    return metaEnum.key(language);
+    QString str = metaEnum.key(language);
+    str[0] = str.at(0).toLower();
+    return str;
 }
 
 void DataDragon::getAllChampionsInfo(const QString &version, DataDragon::Language language, std::function<void(const QJsonObject &)>callback)
@@ -175,19 +178,6 @@ void DataDragon::getAllMapsInfo(const QString &version, DataDragon::Language lan
     });
 }
 
-bool DataDragon::isUpdating() const
-{
-    return mIsUpdating;
-}
-
-void DataDragon::setIsUpdating(bool isUpdating)
-{
-    if (mIsUpdating != isUpdating) {
-        mIsUpdating = isUpdating;
-        emit isUpdatingChanged();
-    }
-}
-
 void DataDragon::setAllChampionsDetailInfo(const QJsonObject &allChampionsInfo)
 {
     if (mAllChampionsDetailInfo != allChampionsInfo) {
@@ -286,46 +276,58 @@ void DataDragon::initDataDragon()
     const QString curVersion = this->version();
     const Language lang = this->language();
 
+    if (curVersion.isEmpty()) {
+        dataDragonVersionCheck([=](int err, QString errStr){err = 0; errStr = "";});
+        return;
+    }
 
     if (mUseMemberFlag == (mUseMemberFlag | Champions))
         getAllChampionsInfo(curVersion, lang, [this](const QJsonObject &json){
             this->setAllChampionsInfo(json);
         });
+    else this->setAllChampionsInfo(QJsonObject());
 
     if (mUseMemberFlag == (mUseMemberFlag | ChampionsDetail))
         getAllChampionsDetailInfo(curVersion, lang, [this](const QJsonObject &json){
             this->setAllChampionsDetailInfo(json);
         });
+    else this->setAllChampionsDetailInfo(QJsonObject());
 
     if (mUseMemberFlag == (mUseMemberFlag | Items))
         getAllItemsInfo(curVersion, lang, [this](const QJsonObject &json){
             this->setAllItemsInfo(json);
         });
+    else this->setAllItemsInfo(QJsonObject());
 
     if (mUseMemberFlag == (mUseMemberFlag | Runes))
         getAllRunesInfo(curVersion, lang, [this](const QJsonArray &json){
             this->setAllRunesInfo(json);
         });
+    else this->setAllRunesInfo(QJsonArray());
 
     if (mUseMemberFlag == (mUseMemberFlag | SummonerSpells))
         getAllSummonerSpellsInfo(curVersion, lang, [this](const QJsonObject &json){
             this->setAllSummonerSpellsInfo(json);
         });
+    else this->setAllSummonerSpellsInfo(QJsonObject());
 
     if (mUseMemberFlag == (mUseMemberFlag | Profileicons))
         getAllProfileiconsInfo(curVersion, lang, [this](const QJsonObject &json){
             this->setAllProfileiconfsInfo(json);
         });
+    else this->setAllProfileiconfsInfo(QJsonObject());
 
     if (mUseMemberFlag == (mUseMemberFlag | MissionAssets))
         getAllMissionAssetsInfo(curVersion, lang, [this](const QJsonObject &json){
             this->setAllMissionAssetsInfo(json);
         });
+    else this->setAllMissionAssetsInfo(QJsonObject());
 
     if (mUseMemberFlag == (mUseMemberFlag | Maps))
         getAllMapsInfo(curVersion, lang, [this](const QJsonObject &json){
             this->setAllMapsInfo(json);
         });
+    else this->setAllMapsInfo(QJsonObject());
 }
 
 void DataDragon::setClinet(QNetworkAccessManager *clinet)
@@ -343,13 +345,14 @@ void DataDragon::setVersion(const QString &version)
     if (mVersion != version){
         mVersion = version;
         emit this->versionChanged();
+        initDataDragon();
     }
 }
 
 void DataDragon::getNewestVersion(std::function<void (QString, int, QString)> versionAndErrAndErrStr) const
 {
     getAllVersions([versionAndErrAndErrStr](const QJsonArray &arr, int err, QString errStr){
-        versionAndErrAndErrStr(arr.isEmpty() ? QString() : arr.first().toString(), err, errStr);
+        versionAndErrAndErrStr(err ? "" : arr.first().toString(), err, errStr);
     });
 }
 
@@ -370,6 +373,38 @@ void DataDragon::getAllVersions(std::function<void (const QJsonArray &, int, QSt
         VersionsAndErrAndErrStr(versions, 0, QString());
     });
 }
+
+DataDragon::Language DataDragon::language() const
+{
+    QSettings settings;
+    return DataDragon::Language(settings.value("DataDragon/language").toInt());
+}
+
+void DataDragon::setLanguage(DataDragon::Language language)
+{
+    QSettings settings;
+    if (this->language() != language){
+        settings.setValue("DataDragon/language", int(language));
+        emit this->languageChanged();
+        initDataDragon();
+    }
+}
+
+QJsonObject DataDragon::getChampByKey(int key) const
+{
+    auto keys = mAllChampionsInfo.keys();
+    for (auto id : keys)
+        if (key == mAllChampionsInfo.value(id).toObject().value("key").toInt())
+            return mAllChampionsInfo.value(id).toObject();
+    return QJsonObject();
+}
+
+QString DataDragon::getChampionIconDirPath() const
+{
+    return getDataDragonPath() + QString("/%1/img/champion")
+            .arg(this->version());
+}
+
 
 void DataDragon::getDataDragon(const QString &version, const QString &downlaodPath,
                                std::function<void (int, QString)> errAndErrStr, std::function<void(qreal)>progrecessCallback) const
@@ -423,35 +458,4 @@ void DataDragon::extrackDataDragon(const QString &fileName, std::function<void (
         successed(exitCode == 0 ? true : false);
         process->deleteLater();
     });
-}
-
-void DataDragon::setLanguage(DataDragon::Language language)
-{
-    QSettings settings;
-    if (this->language() != language){
-        settings.setValue("DataDragon/language", int(language));
-        emit this->languageChanged();
-        initDataDragon();
-    }
-}
-
-QJsonObject DataDragon::getChampByKey(int key) const
-{
-    auto keys = mAllChampionsInfo.keys();
-    for (auto id : keys)
-        if (key == mAllChampionsInfo.value(id).toObject().value("key").toInt())
-            return mAllChampionsInfo.value(id).toObject();
-    return QJsonObject();
-}
-
-QString DataDragon::getChampionIconDirPath() const
-{
-    return getDataDragonPath() + QString("/%1/img/champion")
-            .arg(this->version());
-}
-
-DataDragon::Language DataDragon::language() const
-{
-    QSettings settings;
-    return DataDragon::Language(settings.value("DataDragon/language").toInt());
 }

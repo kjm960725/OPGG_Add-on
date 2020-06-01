@@ -13,9 +13,7 @@
         <file>ICons/MinimizeIcon.png</file>
         <file>ICons/QuitIcon.png</file>
         <file>ICons/WindowIcon.png</file>
-        <file>Pages/ChampSelectPage.qml</file>
         <file>ICons/LeftArrowIcon.png</file>
-        <file>ICons/RIcon.png</file>
         <file>ICons/HomeIcon.png</file>
         <file>ICons/CopyIcon.png</file>
         <file>Components/SpellIcon.qml</file>
@@ -26,9 +24,11 @@
         <file>Components/ChampSelectElement.qml</file>
         <file>Components/ChampSelectView.qml</file>
         <file>Components/PushPopup.qml</file>
-        <file>Pages/HelpPopup.qml</file>
         <file>Components/WebViewForOPGG.qml</file>
         <file>WebScrapyScripts/GetPerkPages.js.txt</file>
         <file>WebScrapyScripts/MultiSearchSort.js.txt</file>
+        <file>Pages/SettingsPopup.qml</file>
+        <file>Pages/GeneralSettingsPage.qml</file>
+        <file>ICons/SettingIcon.png</file>
     </qresource>
 </RCC>

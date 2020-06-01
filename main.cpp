@@ -29,15 +29,8 @@ int main(int argc, char *argv[])
 
     regQmlModules();
 
-
-
-//    makeRiotJsonHeaderFromTxt("C:/test.txt",false,true);
-
     QQmlApplicationEngine engine;
     Challenge challenge(&engine);
-
-//    qDebug() << challenge.readFile(":/WebScrapyScripts/GetPerkPages.js.txt");
-//    qDebug() << challenge.readFile(qApp->applicationDirPath() + "/GetPerkPages.js");
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -55,6 +48,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("riot",challenge.riot());
     engine.rootContext()->setContextProperty("dragon",challenge.dataDragon());
     engine.rootContext()->setContextProperty("obs", challenge.observerFileManager());
+    engine.rootContext()->setContextProperty("opggURL","https://www.op.gg");
     engine.load(url);
 
     return app.exec();

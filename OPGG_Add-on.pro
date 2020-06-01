@@ -88,3 +88,7 @@ HEADERS += \
     riot.h
 
 DISTFILES +=
+
+
+INCLUDEPATH += $$PWD/3rdparty/include
+LIBS += -L$$PWD/3rdparty -lQGumboParser

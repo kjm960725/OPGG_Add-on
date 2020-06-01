@@ -78,19 +78,20 @@ public:
 //    void postMatchReadyAccept(std::function<void(int, QString)>errAndErrStr); //POST /lol-matchmaking/v1/ready-check/decline
 
 
-    // 현재 진행중인 게임 상태값을 가져오는 항목 찾아야함
+    // 현재 진행중인 게임 상태값
     void getGameflowState(std::function<void(GameflowState, int, QString)>stateAndErrAndErrStr);
     void getGameSession(std::function<void(const QJsonObject &, int, QString)>sessionAndErrAndErrStr);
     Q_INVOKABLE void getGameSession(const QJSValue &js);
 
 
-
-    // 현재 룬 정보를 Get,Post,Put 하는 항목 찾아야함
+    // 룬 페이지 제어
     void getPerksAllPages(std::function<void(const QJsonArray &, int, QString)>pagesAndErrAndErrStr);
     void postPerksPage(const QJsonObject &page, std::function<void(const QJsonObject &,int, QString)>pageErrAndErrStr);
     void putPerkPage(int id, const QJsonObject &page, std::function<void(int,QString)>errAndErrStr);
     void getPerkInventory(std::function<void(int, int, QString)>inventoryCountAndErrAndErrStr);
     void delPerkPage(int id, std::function<void(int,QString)>errAndErrStr);
+
+    // OP.GG 전용
     Q_INVOKABLE void putPerkPage(const QJsonObject &page, const QJSValue &js);
 
 
