@@ -19,6 +19,10 @@ OP.GG와 롤 클라이언트를 연동해 룬복사,자동 멀티서치등. OP.G
 - datadragon.h/cpp : [Data Dragon API](https://developer.riotgames.com/docs/lol#data-dragon) > 롤 정적 데이터 API
 
 
+### 외부 라이브러리
+- 3rdParty/QGumboParser : [gumbo-parser](https://github.com/google/gumbo-parser) > C++ HTML 파서
+
+
 # 핵심 기능
 - op.gg 챔피언 분석페이지의 룬페이지를 롤 클라이언트로 복사
 - 롤 클라이언트 매칭시, 픽창연동 및 자동 멀티서치
