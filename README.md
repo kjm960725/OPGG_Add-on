@@ -31,4 +31,3 @@ OP.GG와 롤 클라이언트를 연동해 룬복사,자동 멀티서치등. OP.G
 
 ![KDA](https://user-images.githubusercontent.com/45027993/83393479-d01aee00-a431-11ea-95dc-491e62b075ae.JPG)
 ![runeCopy](https://user-images.githubusercontent.com/45027993/82983614-62cf1d80-a02b-11ea-94b4-d085744aab8c.png)
-![픽창연동](https://user-images.githubusercontent.com/45027993/82985093-5ef0ca80-a02e-11ea-9deb-cf40d0f421a2.PNG)
