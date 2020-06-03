@@ -37,7 +37,7 @@ Rectangle {
     border.width: !complate && inProgress ? 2 : 1
     border.color: !complate && inProgress ? '#ffff00' : '#ffffff'
     width: 200
-    height: 70
+    height: 80
     radius: 10
 
     Row {
@@ -50,7 +50,7 @@ Rectangle {
         ChampIcon {
             id: champ
             width: height
-            height: root.height * 0.9
+            height: root.height * 0.8
             radius: Math.min(width, height) / 2
             fontFamily: root.fontFamily
             nullText: (!complate) && inProgress ? qsTr('선택중') : String()

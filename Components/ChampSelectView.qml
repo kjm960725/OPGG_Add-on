@@ -10,6 +10,8 @@ Item {
     property string team: 'myTeam'
     property LCU riotLCU: null
     readonly property int count: teamRepeater.count
+    readonly property int contentHeight: col.height
+
     property var gameSessionTeamMap: {
         'myTeam'    : 'teamOne',
         'theirTeam' : 'teamTwo'
@@ -25,6 +27,7 @@ Item {
     signal champInfoChanged(var element)
 
     width: 220
+    height: contentHeight
     visible: count > 0
 
     function itemAt(index) { return teamRepeater.itemAt(index) }

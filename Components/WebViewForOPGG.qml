@@ -10,7 +10,6 @@ WebEngineView {
     property string fontFamily: ''
     property var multiSearchNames: new Array
 
-
     signal downloadStarted(var path)
     signal downloadComplated(var path)
 
@@ -20,7 +19,7 @@ WebEngineView {
     }
 
     function sortMultiSearchSummoner(summonerNames) {
-        if (summonerNames.length < 1 || loading || !String(url).includes('www.op.gg/multi/query=')) return
+        if (summonerNames.length < 1 || loading || !String(url).includes('op.gg/multi/query=')) return
         runJavaScript(challenge.readFile(':/WebScrapyScripts/MultiSearchSort.js.txt').replace("_sortNameArgs", JSON.stringify(summonerNames)), function(result){})
     }
 
@@ -53,12 +52,13 @@ WebEngineView {
         })
     }
 
+    onCertificateError: error.ignoreCertificateError()
     onNewViewRequested: { url = request.requestedUrl }
     onJavaScriptConsoleMessage: {} // disable web console output
     onLoadingChanged: {
         if (!loading) {
             const urlStr = url.toString()
-            if (urlStr.includes('www.op.gg')) {
+            if (urlStr.includes('op.gg')) {
                 if (urlStr.includes('multi/query=')) {
                     sortMultiSearchSummoner(multiSearchNames)
                 }
@@ -66,7 +66,6 @@ WebEngineView {
 
         }
     }
-    url: "https://www.op.gg/"
     profile: WebEngineProfile {
         httpAcceptLanguage: 'ko-KR'
         onDownloadRequested: {

@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.0
 
 Item {
-    width: 400
+    width: 550
     height: 400
 
     ColumnLayout {
@@ -22,12 +22,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
         }
 
-        Rectangle {
-            id: rectangle
-            color: "#ffffff"
-            Layout.fillWidth: true
-            Layout.preferredHeight: 1
-        }
+        Rectangle { width: parent.width; height: 1; color: '#ffffff' }
 
         CheckBox {
             id: inChampSessionAction
@@ -79,6 +74,38 @@ Item {
                 leftPadding: parent.indicator.width + parent.spacing + 5
             }
         }
-    }
 
+        Rectangle { width: parent.width; height: 1; color: '#ffffff' }
+
+        Row {
+            spacing: 15
+            Text {
+                text: qsTr('언어 변경') + ' :'
+                font.family: fonts.nanumR
+                font.pixelSize: 14
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
+                color: "#ffffff"
+            }
+
+            ComboBox {
+                visible: false
+                height: 35
+                width: 200
+                anchors.verticalCenter: parent.verticalCenter
+                font.family: fonts.nanumR
+                font.pixelSize: 12
+            }
+            Text {
+                width: 200
+                text: qsTr('※ 준비중인 기능입니다.')
+                wrapMode: Text.WrapAnywhere
+                font.family: fonts.nanumR
+                font.pixelSize: 10
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
+                color: "#aaaaaa"
+            }
+        }
+    }
 }

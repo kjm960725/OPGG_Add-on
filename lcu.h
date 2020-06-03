@@ -68,6 +68,7 @@ public:
 
     // 현재 실행중인 LeagueClient의 국가 코드
     void getClientRegion(std::function<void(const QJsonObject &, int, QString)>regionAndErrAndErrStr);
+    Q_INVOKABLE void getClientRegion(const QJSValue &callback);
 
     // 현재 로비(큐 잡기 직전)의 상태
     void getLobby(std::function<void(const QJsonObject &, int, QString)>lobbyAndErrAndErrStr);

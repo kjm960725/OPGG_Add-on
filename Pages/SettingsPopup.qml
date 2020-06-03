@@ -12,11 +12,7 @@ Popup {
         border.width: 1
         border.color: '#aaaaaa'
     }
-
-//    signal accepted()
-//    modal: false
-//    closePolicy: Popup.CloseOnEscape
-
+    onOpened: settingPageLoader.source = 'qrc:/Pages/GeneralSettingsPage.qml'
 
     Row {
         id: col
@@ -41,12 +37,12 @@ Popup {
 //                    }
 //                }
 
-//                ListElement {
-//                    name: qsTr('자주 묻는 질문')
-//                    trriger: function() {
-
-//                    }
-//                }
+                ListElement {
+                    name: qsTr('자주 묻는 질문')
+                    trriger: function() {
+                        settingPageLoader.source = 'qrc:/Pages/QnAPage.qml'
+                    }
+                }
 
 //                ListElement {
 //                    name: qsTr('프로그램 정보')
@@ -77,7 +73,6 @@ Popup {
                     value: delegate.hovered ? '#000000' : "#ffffff"
                 }
             }
-
             focus: true
         }
 
@@ -88,22 +83,14 @@ Popup {
             anchors.verticalCenter: parent.verticalCenter
         }
 
-        Page {
-            background: Rectangle {
-                color: '#00000000'
-            }
+        ScrollView {
             height: parent.height
             width: settingPageLoader.width
-
-            ScrollView {
-                height: parent.height
-                width: settingPageLoader.width
-                contentHeight: settingPageLoader.height
-                clip: true
-                Loader {
-                    id: settingPageLoader
-                    source: 'qrc:/Pages/GeneralSettingsPage.qml'
-                }
+            contentHeight: settingPageLoader.height
+            clip: true
+            Loader {
+                id: settingPageLoader
+                source: 'qrc:/Pages/GeneralSettingsPage.qml'
             }
         }
 

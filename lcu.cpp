@@ -179,6 +179,15 @@ void LCU::getClientRegion(std::function<void (const QJsonObject &, int, QString)
     //}
 }
 
+void LCU::getClientRegion(const QJSValue &_callback)
+{
+    QJSValue *callback = new QJSValue(_callback);
+    getClientRegion([this,callback](const QJsonObject &obj, int err, QString errStr){
+        callback->call(QJSValueList() << convertToJSValue(obj) << err << errStr);
+        delete callback;
+    });
+}
+
 void LCU::getLobby(std::function<void (const QJsonObject &, int, QString)> lobbyAndErrAndErrStr)
 {
     get("/lol-lobby/v2/lobby",[lobbyAndErrAndErrStr](const QByteArray &read, int err, QString errStr){

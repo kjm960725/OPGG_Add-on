@@ -1,4 +1,4 @@
-import QtQuick 2.12
+﻿import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.3
 
@@ -18,9 +18,8 @@ Window {
     property Component content
     property Component titleItem
 
-    Component.onCompleted: {
-
-    }
+    onMinimumHeightChanged: if (height < minimumHeight) height = minimumHeight
+    onMinimumWidthChanged: if (width < minimumWidth) width = minimumWidth
 
     Rectangle {
         id: background

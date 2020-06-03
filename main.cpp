@@ -16,6 +16,10 @@
 
 #define PROJECT_DIR QString("C:/Users/KJM96/OneDrive/QTProject/OPGG")
 
+static QMutex logMutex;
+static QString userFolerPath;
+void makeUserFolders();
+void LogToFile(QtMsgType type, const QMessageLogContext &context, const QString &_msg);
 void makeRiotJsonHeaderFromTxt(const QString &filePath, bool echo, bool headerAutoSave = false);
 void regQmlModules();
 int main(int argc, char *argv[])
@@ -27,6 +31,8 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QtWebEngine::initialize();
 
+    makeUserFolders();
+    qInstallMessageHandler(LogToFile);
     regQmlModules();
 
     QQmlApplicationEngine engine;
@@ -47,8 +53,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("lcu",challenge.lcu());
     engine.rootContext()->setContextProperty("riot",challenge.riot());
     engine.rootContext()->setContextProperty("dragon",challenge.dataDragon());
+    engine.rootContext()->setContextProperty("userFolerPath",userFolerPath);
     engine.rootContext()->setContextProperty("obs", challenge.observerFileManager());
-    engine.rootContext()->setContextProperty("opggURL","https://www.op.gg");
     engine.load(url);
 
     return app.exec();
@@ -64,6 +70,79 @@ void regQmlModules()
     qmlRegisterType<ObserverFileManager>("Riot", 1, 0, "ObserverFileManager");
 
     qRegisterMetaType<riot::LCU::GameflowState>("GameflowState");
+}
+void makeUserFolders()
+{
+    userFolerPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+            + QString("/%1").arg(qApp->applicationName());
+    if(!QDir(userFolerPath).exists()) QDir().mkdir(userFolerPath);
+}
+void LogToFile(QtMsgType type, const QMessageLogContext &context, const QString &_msg)
+{
+    QMutexLocker lock(&logMutex);
+    QString curtime = QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+    QString curDate = QDateTime::currentDateTime().toString("yyyyMMdd");
+
+    QByteArray localMsg = _msg.toLocal8Bit();
+    const char *function = context.function ? context.function : "";
+    switch (type) {
+    case QtDebugMsg:
+        fprintf(stdout, "[Debug]\t%s\t%s\n", curtime.toLocal8Bit().constData() , localMsg.constData());
+        fflush(stdout);
+        break;
+    case QtInfoMsg:
+        fprintf(stdout, "[Info]\t%s\t%s\n", curtime.toLocal8Bit().constData(), localMsg.constData());
+        fflush(stdout);
+        break;
+    case QtWarningMsg:
+        fprintf(stderr, "[Warning]\t%s\t%s (%s:%u, %s)\n", curtime.toLocal8Bit().constData(), localMsg.constData(), context.file, context.line, function);
+        fflush(stderr);
+        break;
+    case QtCriticalMsg:
+        fprintf(stderr, "[Critical]\t%s\t%s (%s:%u, %s)\n", curtime.toLocal8Bit().constData(), localMsg.constData(), context.file, context.line, function);
+        fflush(stderr);
+        break;
+    case QtFatalMsg:
+        fprintf(stderr, "[Fatal]\t%s\t%s (%s:%u, %s)\n", curtime.toLocal8Bit().constData(), localMsg.constData(), context.file, context.line, function);
+        fflush(stderr);
+        break;
+    }
+
+//    QString logPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+//            + QString("%1%2_Logs").arg(QDir::separator()).arg(qApp->organizationName());
+//    if(!QDir(logPath).exists()) QDir().mkdir(logPath);
+//    QFile file(QString("%1%4%2_%3.log")
+//               .arg(logPath)
+//               .arg(qApp->applicationName())
+//               .arg(curDate)
+//               .arg(QDir::separator()));
+//    if(file.open(QIODevice::Append | QIODevice::Text)) {
+//        QTextStream out(&file);
+//        QString msg = _msg;
+//        msg.replace('\n',"\n\t\t");
+//        switch (type) {
+//        case QtDebugMsg:
+//            out << QString("[Debug]\t%1\t%2\n").arg(curtime).arg(msg);
+//            file.flush();
+//            break;
+//        case QtInfoMsg:
+//            out << QString("[Info]\t%1\t%2\n").arg(curtime).arg(msg);
+//            file.flush();
+//            break;
+//        case QtWarningMsg:
+//            out << QString("[Warning]\t%1\t%2\n").arg(curtime).arg(msg);
+//            file.flush();
+//            break;
+//        case QtCriticalMsg:
+//            out << QString("[Critical]\t%1\t%2\t%3\t%4\n").arg(curtime).arg(msg).arg(context.function).arg(context.line);
+//            file.flush();
+//            break;
+//        case QtFatalMsg:
+//            out << QString("[Fatal]\t%1\t%2\n").arg(curtime).arg(msg);
+//            file.flush();
+//            break;
+//        }
+//    }
 }
 
 void makeRiotJsonHeaderFromTxt(const QString &filePath, bool echo, bool headerAutoSave)

@@ -7,28 +7,54 @@ import 'Fonts'
 import 'Pages'
 import QtWebEngine 1.8
 import Clipboard 1.0
-import Qt.labs.settings 1.0
+import Qt.labs.settings 1.1
 
 MainWindow {
     id: window
+
+    Connections {
+        target: challenge
+        onCurrentSummonerChanged: {
+            if (Object.keys(challenge.currentSummoner).length)
+                lcu.getClientRegion(function(object,err,errStr){
+                    if (err === 0)
+                        if (JSON.stringify(settings.region) !== JSON.stringify(object)) {
+                            settings.region = object
+                        }
+                })
+        }
+    }
+
+    readonly property string opggURL: {
+        var webRegion = settings.region === undefined ? 'www' : settings.region.webRegion
+        return 'https://' + webRegion + '.op.gg'
+    }
+    onOpggURLChanged: webView.url = opggURL
     title: qsTr("OPGG Add-on (made by 청산가리중독자)")
     color: '#222222'
 //    titleColor: '#88000000'
-    minimumHeight: 850
+    minimumHeight: Math.max(teams.contentHeight + titlew.height + 20, 800)
     minimumWidth: 1350
     width: 1350
-    height: 850
+    height: 800
     borderColor: '#000000'
     borderWidth: 1
 
-
+    property Item titlew: null
+    property Repeater teams: null
     property WebEngineView webView: null
     property SettingsPopup settingsPopup: null
+    property Settings settings: null
 
     Fonts { id: fonts; }
     PushPopup { id: push; fontFamily: fonts.nanumR }
 
     titleItem: TitleBar {
+        id: title
+        Component.onCompleted: {
+            window.titlew = this
+        }
+
         Clipboard { id:clip; }
         onClickedHome: webView.url = opggURL
         onClickedNext: webView.goForward()
@@ -43,7 +69,6 @@ MainWindow {
     }
 
     content: Item {
-
         SettingsPopup {
             id: settingsPopup
             Component.onCompleted: window.settingsPopup = this
@@ -52,6 +77,11 @@ MainWindow {
                 property bool inChampSessionAction: true // true:픽창 진입시 아군 멀티서치
                 property bool inGameSessionAction: true // true:인게임 진입시 적군 멀티서치
                 property bool selectionChampAction: false // true:챔피언 선택시 OP.GG 챔피언 페이지로 이동
+                property var region
+                onRegionChanged: {
+                    console.info('Region Chagned :', JSON.stringify(region))
+                }
+                Component.onCompleted: window.settings = this
             }
         }
         Shortcut { sequence: 'F1'; onActivated: {
@@ -68,7 +98,7 @@ MainWindow {
                 }
             }
         }
-        Shortcut { sequence: 'F3'; onActivated:  webView.url = opggURL + '/summoner/userName=' + challenge.currentSummoner.displayName }
+        Shortcut { sequence: 'F3'; onActivated:  webView.url = opggURL+ '/summoner/userName=' + challenge.currentSummoner.displayName }
         Shortcut { sequence: 'F4'; onActivated:  { // 자신이 픽창으로 선택한 챔피언 분석 페이지로 이동
                 var view = teams.itemAt(0)
                 for (var i = 0; i < view.count; ++i) {
@@ -92,15 +122,22 @@ MainWindow {
         RowLayout {
             anchors.fill: parent
             spacing: 0
-            ColumnLayout {
+            Column {
+                id: champViewLayout
                 visible: teams.champCount
-                Layout.fillHeight: true
+                spacing: 30
                 Layout.maximumWidth: 240
                 Layout.minimumWidth: 240
                 Repeater {
+                    Component.onCompleted: window.teams = this
+
                     id: teams
                     model: 2
-                    property int champCount: {
+                    readonly property int contentHeight: {
+                        return champViewLayout.height
+                    }
+
+                    readonly property int champCount: {
                         let result = 0
                         for (var i = 0; i < count; ++i) { result += itemAt(i).count }
                         return result
@@ -113,8 +150,8 @@ MainWindow {
                     ChampSelectView {
                         iconDirPath: dragon.getDataDragonPath() + '/' + dragon.version + '/img'
                         allChampInfos: dragon.allChampionsInfo
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
+                        anchors.left: parent.left
+                        anchors.right: parent.right
                         fontFamily: fonts.nanumR
                         riotLCU: lcu
                         team: index === 0 ? 'myTeam' : 'theirTeam'
@@ -167,7 +204,10 @@ MainWindow {
                 id: webView
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                Component.onCompleted: window.webView = this
+                Component.onCompleted: {
+                    window.webView = this
+                    url = opggURL
+                }
                 fontFamily: fonts.nanumR
                 eventPush: push
                 onUrlChanged: console.info('webView.urlChanged :',url)
