@@ -1,6 +1,13 @@
 # OPGG_Add-on
 OP.GG와 롤 클라이언트를 연동해 룬복사,자동 멀티서치등. OP.GG의 기능을 확장한 Windows 프로그램입니다.
 
+# 할 일 노트
+  - Overlay 방식으로 인게임 내에 전적 표시 구현
+  - 자동 업데이트 기능 구현
+  - 내전/대회 방송용 인터페이스 / 기능 구현
+  - 아이템 복사 구현
+  - 일부 유저에게 인스톨 진행이 막히는 버그 수정
+
 ### 사용언어 : C/C++, QML, JS 
 
 
@@ -31,8 +38,3 @@ OP.GG와 롤 클라이언트를 연동해 룬복사,자동 멀티서치등. OP.G
 
 ![KDA](https://user-images.githubusercontent.com/45027993/83393479-d01aee00-a431-11ea-95dc-491e62b075ae.JPG)
 ![runeCopy](https://user-images.githubusercontent.com/45027993/82983614-62cf1d80-a02b-11ea-94b4-d085744aab8c.png)
-
-# 할 일 노트
-  - Overlay 방식으로 인게임 내에 전적 표시 구현
-  - 자동 업데이트 기능 구현
-  - 내전/대회 방송용 인터페이스 / 기능 구현
