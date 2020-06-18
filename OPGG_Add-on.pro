@@ -15,12 +15,18 @@ QMAKE_CXXFLAGS_WARN_ON-= -w34100
 
 SOURCES += \
         challenge.cpp \
+#        competconfig.cpp \
+#        competmacth.cpp \
+#        competmanager.cpp \
+#        competteam.cpp \
+#        competuser.cpp \
         datadragon.cpp \
         lcu.cpp \
         main.cpp \
         observerfilemanager.cpp \
         qmlclipboardadapter.cpp \
-        riot.cpp
+        riot.cpp \
+        updatetool.cpp
 
 RC_ICONS = $$PWD/Icons/OPGG.ico
 RESOURCES += qml.qrc
@@ -81,11 +87,17 @@ HEADERS += \
     RiotJson/Translation.h \
     RiotJson/_RiotJsonInclude.h \
     challenge.h \
+#    competconfig.h \
+#    competmacth.h \
+#    competmanager.h \
+#    competteam.h \
+#    competuser.h \
     datadragon.h \
     lcu.h \
     observerfilemanager.h \
     qmlclipboardadapter.h \
-    riot.h
+    riot.h \
+    updatetool.h
 
 DISTFILES +=
 

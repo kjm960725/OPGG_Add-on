@@ -13,8 +13,13 @@
 #include <QtWebEngine>
 #include "qmlclipboardadapter.h"
 #include <QSslSocket>
+//#include "competuser.h"
+//#include "competteam.h"
+//#include "competmanager.h"
+//#include "competmacth.h"
+#include "updatetool.h"
 
-#define PROJECT_DIR QString("C:/Users/KJM96/OneDrive/QTProject/OPGG")
+#define PROJECT_DIR QString("C:/Users/KJM96/OneDrive/QTProject/OPGG_Add_on")
 
 static QMutex logMutex;
 static QString userFolerPath;
@@ -50,6 +55,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("appDirPath", qApp->applicationDirPath());
     engine.rootContext()->setContextProperty("downloadPath", QString("file:%1").arg(QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first()));
     engine.rootContext()->setContextProperty("challenge",&challenge);
+    engine.rootContext()->setContextProperty("updateTool",challenge.updateTool());
     engine.rootContext()->setContextProperty("lcu",challenge.lcu());
     engine.rootContext()->setContextProperty("riot",challenge.riot());
     engine.rootContext()->setContextProperty("dragon",challenge.dataDragon());

@@ -35,7 +35,6 @@ void Riot::setClient(QNetworkAccessManager *client)
     mClient = client;
 }
 
-
 QString Riot::apiKey() const
 {
     return mApiKey;

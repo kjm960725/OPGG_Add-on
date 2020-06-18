@@ -95,7 +95,7 @@ public:
     Language language() const;
     void setLanguage(Language language);
 
-    // get info from member (memory)
+    // get from member
     QJsonObject allChampionsInfo() const { return mAllChampionsInfo; }
     QJsonObject allChampionsDetailInfo() const { return mAllChampionsDetailInfo; }
     QJsonObject allItemsInfo() const { return mAllItemsInfo; }

@@ -28,16 +28,18 @@ Challenge::Challenge(QJSEngine *engine, QObject *parent) : QObject(parent)
 
 QString Challenge::readFile(const QString &path)
 {
+    QString result;
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Challenge::readFile error : open file failed" << file.error() << file.errorString();
-        return QString();
     }
-    return file.readAll();
+    result = file.readAll();
+    return result;
 }
 
 void Challenge::init()
 {
+    mUpdateTool = new UpdateTool(this);
     mClient = new QNetworkAccessManager(this);
     mRiot = new Riot(mClient, "{API-KEY}", this);
     mDataDragon = new DataDragon(mClient, DataDragon::ko_KR, DataDragon::All, this);
@@ -51,6 +53,7 @@ void Challenge::init()
     connect(mLCU, &LCU::disconnected, [=](){ qInfo() << "League cleint disconnected"; });
 
     mLCU->start();
+    mUpdateTool->updateCheckTimerStart(60000);
 }
 
 QNetworkAccessManager *Challenge::client() const
@@ -215,6 +218,11 @@ void Challenge::setCurrentSummoner(const QJsonObject &currentSummoner)
         qInfo() << "currentSummonerName :" << currentSummoner;
         emit currentSummonerChanged();
     }
+}
+
+UpdateTool *Challenge::updateTool() const
+{
+    return mUpdateTool;
 }
 
 ObserverFileManager *Challenge::observerFileManager() const

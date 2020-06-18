@@ -6,6 +6,10 @@ import Clipboard 1.0
 
 WebEngineView {
     id: root
+    onUrlChanged:  {
+        console.log('URL Changed :', url)
+    }
+
     property PushPopup eventPush: PushPopup { fontFamily: root.fontFamily }
     property string fontFamily: ''
     property var multiSearchNames: new Array

@@ -9,6 +9,7 @@
 #include "lcu.h"
 #include "riot.h"
 #include "datadragon.h"
+#include "updatetool.h"
 #include "observerfilemanager.h"
 
 using namespace riot;
@@ -26,6 +27,7 @@ public:
     Q_INVOKABLE static QString readFile(const QString &path);
 
     QNetworkAccessManager *client() const;
+    UpdateTool *updateTool() const;
     Riot *riot() const;
     LCU *lcu() const;
     DataDragon *dataDragon() const;
@@ -35,6 +37,7 @@ public:
     QJsonObject currentSummoner() const;
 
     Q_INVOKABLE void getChampRateByOPGG(const QString &summonerName, const QJSValue &callback) const;
+
 
 
 
@@ -55,6 +58,7 @@ private:
     QJsonObject mCurrentSummoner;
     void setCurrentSummoner(const QJsonObject &currentSummoner);
 
+    UpdateTool *mUpdateTool;
     QJSEngine *mJSEngine;
     QNetworkAccessManager *mClient;
     Riot *mRiot;

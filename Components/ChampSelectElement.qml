@@ -37,7 +37,7 @@ Rectangle {
     border.width: !complate && inProgress ? 2 : 1
     border.color: !complate && inProgress ? '#ffff00' : '#ffffff'
     width: 200
-    height: 80
+    height: 65
     radius: 10
 
     Row {
@@ -48,9 +48,10 @@ Rectangle {
         anchors.rightMargin: 10
         spacing: 10
         ChampIcon {
+
             id: champ
             width: height
-            height: root.height * 0.8
+            height: root.height * 0.9
             radius: Math.min(width, height) / 2
             fontFamily: root.fontFamily
             nullText: (!complate) && inProgress ? qsTr('선택중') : String()
@@ -58,8 +59,9 @@ Rectangle {
         }
 
         Column {
+            id: infoLayout
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 5
+            spacing: 3
             Text {
                 id: position
                 font.family: fontFamily
@@ -86,7 +88,7 @@ Rectangle {
                     id: summonerNameText
                     font.family: fontFamily
                     color: summonerNameArea.containsMouse ? '#ff4444' : '#ffff44'
-                    font.pixelSize: 14
+                    font.pixelSize: 12
                     style: Text.Outline
                     text: root.summonerName
                 }

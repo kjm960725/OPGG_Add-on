@@ -31,5 +31,7 @@
         <file>Pages/GeneralSettingsPage.qml</file>
         <file>ICons/SettingIcon.png</file>
         <file>Pages/QnAPage.qml</file>
+        <file>Pages/UpdatePage.qml</file>
+        <file>Components/AskPopup.qml</file>
     </qresource>
 </RCC>

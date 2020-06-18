@@ -25,42 +25,44 @@ Popup {
             interactive: false // disable scroll
             model: ListModel {
                 ListElement {
+                    name: qsTr('프로그램 업데이트')
+                    type: 'Update'
+                    trriger: function() {
+                        settingPageLoader.source = 'qrc:/Pages/UpdatePage.qml'
+//                        updateTool.startUpdate()
+//                        Qt.quit()
+                    }
+                }
+                ListElement { type: 'Update.Spacer'}
+                ListElement {
                     name: qsTr('일반')
+                    type: 'General'
                     trriger: function() {
                         settingPageLoader.source = 'qrc:/Pages/GeneralSettingsPage.qml'
                     }
                 }
-//                ListElement {
-//                    name: qsTr('단축키')
-//                    trriger: function() {
-
-//                    }
-//                }
 
                 ListElement {
                     name: qsTr('자주 묻는 질문')
+                    type: 'General'
                     trriger: function() {
                         settingPageLoader.source = 'qrc:/Pages/QnAPage.qml'
                     }
                 }
-
-//                ListElement {
-//                    name: qsTr('프로그램 정보')
-//                    trriger: function() {
-
-//                    }
-//                }
             }
             delegate: ItemDelegate {
                 id: delegate
                 Behavior on scale { NumberAnimation { duration: 20 } }
                 text: name
+                enabled: String(type).includes('Spacer') ? false : true
                 anchors.left: parent.left
                 anchors.right: parent.right
                 font.family: fonts.nanumB
                 onClicked: {
                     trriger()
                 }
+                height: visible ? 40 : 0
+                visible: String(type).includes('Update') ? updateTool.hasUpdate : true
 
                 scale: pressed ? 0.95 : 1
                 background: Rectangle {
@@ -70,7 +72,11 @@ Popup {
                 Binding {
                     target: contentItem
                     property: "color"
-                    value: delegate.hovered ? '#000000' : "#ffffff"
+                    value: {
+                        if (String(type).includes('Update'))
+                            return delegate.hovered ? '#000000' : "#ffff00"
+                        return delegate.hovered ? '#000000' : "#ffffff"
+                    }
                 }
             }
             focus: true

@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.0
 Item {
     width: 800
     height: 600
+
     ListView {
 
         id: listView
@@ -128,7 +129,7 @@ Item {
             }
             ListElement {
                 question: qsTr("업데이트는 어떻게하나요?")
-                answer: qsTr('현재 자동 업데이트기능은 구현하지 않았습니다. 대신에 <a href="http://www.inven.co.kr/board/lol/2766?name=nicname&keyword=%EC%B2%AD%EC%82%B0%EA%B0%80%EB%A6%AC%EC%A4%91%EB%8F%85&x=0&y=0&iskin=&mskin=&p=1&query=list&my=&category=&sort=PID&orderby=&sterm=">[롤 인벤 팁/노하우]</a> 게시판에 주기적으로 최신 버전을 올리고 있습니다.')
+                answer: qsTr('새로운 업데이트가 있을경우 자동으로 감지후 업데이트 여부를 확인합니다.')
             }
             ListElement {
                 question: qsTr("이 프로그램은 어떤방식으로 돌아가나요?")

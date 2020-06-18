@@ -11,6 +11,12 @@ Item {
     property LCU riotLCU: null
     readonly property int count: teamRepeater.count
     readonly property int contentHeight: col.height
+    property Component background: null
+
+    Loader {
+        anchors.fill: parent
+        sourceComponent: background
+    }
 
     property var gameSessionTeamMap: {
         'myTeam'    : 'teamOne',
@@ -245,7 +251,6 @@ Item {
                             teamRepeater.itemAt(index).summonerName = inGameSession[gameSessionTeamMap[team]][index].summonerName;
                             teamRepeater.itemAt(index).summonerEnalbe = true
                         }
-
                     }
                 }
 

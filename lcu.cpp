@@ -447,16 +447,16 @@ void LCU::getGameflowState(std::function<void (GameflowState, int, QString)> sta
     get("/lol-gameflow/v1/gameflow-phase",[stateAndErrAndErrStr](const QByteArray &read, int err, QString errStr){
         QString str = QString(read).toLower().remove(QRegExp("[^a-z]"));
         LCU::GameflowState state = None;
-        if      (str == "lobby") state = Lobby;
-        else if (str == "matchmaking") state = Matchmaking;
-        else if (str == "readycheck") state = ReadyCheck;
-        else if (str == "champselect") state = ChampSelect;
-        else if (str == "inprogress") state = InProgress;
-        else if (str == "reconnect") state = Reconnect;
+        if      (str == "lobby")           state = Lobby;
+        else if (str == "matchmaking")     state = Matchmaking;
+        else if (str == "readycheck")      state = ReadyCheck;
+        else if (str == "champselect")     state = ChampSelect;
+        else if (str == "inprogress")      state = InProgress;
+        else if (str == "reconnect")       state = Reconnect;
         else if (str == "waitingforstats") state = WaitingForStats;
-        else if (str == "endofgame") state = EndOfGame;
-        else if (str == "preendofgame") state = PreEndOfGame;
-        else if (str == "none") state = None;
+        else if (str == "endofgame")       state = EndOfGame;
+        else if (str == "preendofgame")    state = PreEndOfGame;
+        else if (str == "none")            state = None;
         else {
             qWarning() << "LCU::getGameflowState - undefined state :" << read;
         }
@@ -601,7 +601,7 @@ void LCU::run()
         } catch (ConnectionError error) {
             setConnected(false, "", "", error);
         }
-        dealay(500);
+        dealay(1000);
     }
 }
 
@@ -704,7 +704,7 @@ QString LCU::getLCUPathFromProcess()
         return QString();
     }
 
-    const QStringList args = QString(read).remove(QRegExp("[\r\n\"]")) .split(" --");
+    const QStringList args = QString(read).remove(QRegExp("[\r\n\"]")).split(" --");
 
     QString installPath;
     const QString findOption = "install-directory=";

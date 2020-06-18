@@ -9,7 +9,7 @@ Window {
     height: 800
     minimumHeight: 600
     minimumWidth: 800
-    flags: Qt.Window | Qt.FramelessWindowHint /*| Qt.WindowStaysOnTopHint*/
+    flags: Qt.Window | Qt.FramelessWindowHint
 
     color: '#222222'
     property color titleColor: '#00000000'

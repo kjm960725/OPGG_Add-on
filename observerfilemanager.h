@@ -5,6 +5,7 @@
 #include <functional>
 #include <QJSValue>
 
+// QML Invoke 전용 객체
 class ObserverFileManager : public QObject
 {
     Q_OBJECT
