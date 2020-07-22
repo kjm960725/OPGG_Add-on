@@ -16,6 +16,7 @@ class LCU : public QThread
 {
     Q_OBJECT
     Q_PROPERTY(bool isConnected READ isConnected NOTIFY isConnectedChanged)
+    Q_PROPERTY(ConnectionError error READ error NOTIFY errorChanged)
 public:
     explicit LCU(QObject *parent = nullptr);
     explicit LCU(QNetworkAccessManager *client, QObject *parent = nullptr);
@@ -97,6 +98,7 @@ public:
 
 
 signals:
+    void errorChanged();
     void connected();
     void disconnected();
     void isConnectedChanged();
@@ -114,6 +116,7 @@ private:
     static void dealay(int msec);
     static QString getLCUPathFromProcess();
     static QByteArray createAuthorizationHeader(const QString &password);
+    static QMap<QString,QString> parseCommandLineByWMIC(const QByteArray &data);
 
     mutable QMutex mMutex;
     void setConnected(bool isConnected, const QString &port, const QString &password, ConnectionError error);

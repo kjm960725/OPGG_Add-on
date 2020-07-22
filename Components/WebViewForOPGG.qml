@@ -1,6 +1,7 @@
-﻿import QtQuick 2.12
-import QtWebEngine 1.8
-import QtQuick.Controls 2.12
+﻿import QtQml 2.15
+import QtQuick 2.15
+import QtWebEngine 1.10
+import QtQuick.Controls 2.15
 import Riot 1.0
 import Clipboard 1.0
 
@@ -57,8 +58,9 @@ WebEngineView {
     }
 
     onCertificateError: error.ignoreCertificateError()
-    onNewViewRequested: { url = request.requestedUrl }
+    onNewViewRequested: request.openIn(root)
     onJavaScriptConsoleMessage: {} // disable web console output
+
     onLoadingChanged: {
         if (!loading) {
             const urlStr = url.toString()

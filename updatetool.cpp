@@ -13,10 +13,10 @@ UpdateTool::UpdateTool(QObject *parent) :
 {
     connect(&mProcess, SIGNAL(started()), this, SLOT(processStarted()));
 
-    connect(&mProcess, QOverload<int>::of(&QProcess::finished)
+    connect(&mProcess, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished)
             , this, &UpdateTool::processFinished);
 
-    connect(&mProcess, SIGNAL(error(QProcess::ProcessError))
+    connect(&mProcess, SIGNAL(errorOccurred (QProcess::ProcessError))
           , this, SLOT(processError(QProcess::ProcessError)));
 
     connect(mUpdateCheckTimer, &QTimer::timeout
@@ -31,19 +31,19 @@ UpdateTool::UpdateTool(QObject *parent) :
 void UpdateTool::checkUpdate()
 {
     QString toolName = "maintenancetool.exe";
-    QString path = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(toolName);
+    QString path = QDir(qApp->applicationDirPath()).absoluteFilePath(toolName);
     QStringList args;
-    if(mProcess.state() == QProcess::NotRunning){
-      args.append("--checkupdates");
-      mProcess.start(path, args);
-    }else{
-      qDebug() << "Already started.";
+    if (mProcess.state() == QProcess::NotRunning) {
+        args.append("--checkupdates");
+        mProcess.start(path, args);
+    } else {
+        qDebug() << "Already started.";
     }
 }
 
 void UpdateTool::startUpdate()
 {
-    if (!QProcess::startDetached(createUpdateBatFile())) {
+    if (!QProcess::startDetached(createUpdateBatFile(), QStringList())) {
         qWarning() << "can not run bat \"update\"";
     }
 }
@@ -138,18 +138,17 @@ void UpdateTool::processFinished(int exitCode)
     bool enabled = false;
     lines = stdOutStr.split("\n");
     foreach (const QString &line, lines) {
-      if(line.startsWith("<updates>")){
-        enabled = true;
-        xmlStr.append(line);
-      }else if(line.endsWith("</updates>")){
-        xmlStr.append(line);
-        break;
-      }else if(enabled){
-        xmlStr.append(line);
-      }else{
-      }
+        if(line.startsWith("<updates>")) {
+            enabled = true;
+            xmlStr.append(line);
+        } else if (line.endsWith("</updates>")) {
+            xmlStr.append(line);
+            break;
+        } else if (enabled) {
+            xmlStr.append(line);
+        }
     }
-    if(xmlStr.length() > 0){
+    if (xmlStr.length() > 0) {
         setUpdateDetails(xmlStr);
         setHasUpdate(true);
     } else {
@@ -170,7 +169,7 @@ void UpdateTool::processFinished(int exitCode)
 
 void UpdateTool::processError(QProcess::ProcessError error)
 {
-  qDebug() <<  "UpdateTool process error :" << error;
-  setState(UpdateTool::NotRunning);
+    qDebug() <<  "UpdateTool process error :" << error << mProcess.errorString();
+    setState(UpdateTool::NotRunning);
 }
 

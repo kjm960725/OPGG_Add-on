@@ -1,9 +1,12 @@
 ﻿#include "challenge.h"
+#include <QDir>
 #include <QUrlQuery>
+#include <QStandardPaths>
 #include <QTextCodec>
 #include "lcu.h"
 #include "datadragon.h"
 #include "riot.h"
+#include <QFile>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -35,6 +38,24 @@ QString Challenge::readFile(const QString &path)
     }
     result = file.readAll();
     return result;
+}
+
+bool Challenge::clearWebCache()
+{
+    QString path = QString("%1/%2")
+            .arg(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)).arg("cache")
+            .replace("/","\\");
+    QDir dir(path);
+    return dir.removeRecursively();
+}
+
+bool Challenge::clearWebCookie()
+{
+    QString path = QString("%1/%2")
+            .arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation)).arg("QtWebEngine")
+            .replace("\\","/");
+    QDir dir(path);
+    return dir.removeRecursively();
 }
 
 void Challenge::init()

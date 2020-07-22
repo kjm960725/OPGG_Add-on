@@ -601,7 +601,7 @@ void LCU::run()
         } catch (ConnectionError error) {
             setConnected(false, "", "", error);
         }
-        dealay(1000);
+        dealay(3000);
     }
 }
 
@@ -704,17 +704,19 @@ QString LCU::getLCUPathFromProcess()
         return QString();
     }
 
-    const QStringList args = QString(read).remove(QRegExp("[\r\n\"]")).split(" --");
+    auto keyMap = parseCommandLineByWMIC(read);
 
-    QString installPath;
-    const QString findOption = "install-directory=";
-    for (auto arg : args) {
-        if (arg.contains(findOption)) {
-            installPath = QString(arg).remove(findOption).replace("\\","/");
-            break;
-        }
-    }
-    return installPath;
+    return QString(keyMap.value("install-directory")).replace("\\","/");
+//    const QStringList args = QString(read).remove(QRegExp("[\r\n\"]")).split(" --");
+//    QString installPath;
+//    const QString findOption = "install-directory=";
+//    for (auto arg : args) {
+//        if (arg.contains(findOption)) {
+//            installPath = QString(arg).remove(findOption).replace("\\","/");
+//            break;
+//        }
+//    }
+
 }
 
 QByteArray LCU::createAuthorizationHeader(const QString &password)
@@ -722,6 +724,35 @@ QByteArray LCU::createAuthorizationHeader(const QString &password)
     QString credentials = QString("riot:%2").arg(password);
     QString credentialsBase64 = credentials.toLocal8Bit().toBase64();
     return QString("Basic %1").arg(credentialsBase64).toLocal8Bit();
+}
+
+
+QMap<QString, QString> LCU::parseCommandLineByWMIC(const QByteArray &data)
+{
+    QMap<QString, QString> result;
+    int blockBegin;
+    int cursor = 0;
+    bool isInBlock = true;
+    while (cursor >= 0) {
+        cursor = data.indexOf('\"', cursor + 1);
+        if (isInBlock) {
+            blockBegin = cursor + 1;
+
+        } else {
+            int blockLength = cursor - blockBegin;
+            QString arg(data.mid(blockBegin, blockLength));
+            if (result.isEmpty()) {
+                result.insert("appPath", arg);
+            } else if(arg.left(2) == "--") {
+                QStringList keyValue = arg.remove(0,2).split("=");
+                if (!keyValue.isEmpty()) {
+                    result.insert(keyValue.first(), keyValue.count() > 1 ? keyValue.last() : "");
+                }
+            }
+        }
+        isInBlock = !isInBlock;
+    }
+    return result;
 }
 
 LCU::ConnectionError LCU::error() const
@@ -737,8 +768,11 @@ void LCU::setConnected(bool isConnected, const QString &port, const QString &pas
     mLCUPassword = password;
     if (error != mError) {
         mError = error;
-        if (error != NoError)
+        if (error != NoError){
             QMetaObject::invokeMethod(this, [this](){emit errorOccurred();}, Qt::QueuedConnection);
+            qWarning() << "LCU error occurred :" << error;
+        }
+        emit errorChanged();
     }
     if (mIsConnected != isConnected) {
         mIsConnected = isConnected;

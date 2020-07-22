@@ -1,5 +1,5 @@
-﻿import QtQuick 2.0
-import QtQuick.Controls 2.5
+﻿import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 Popup {
     property string fontFamily
@@ -17,7 +17,7 @@ Popup {
         onTriggered: close()
     }
 
-    width: 300
+    width: 400
     height: col.height + 30
 
     id: root
@@ -26,9 +26,9 @@ Popup {
     anchors.centerIn: parent
     background: Rectangle {
         radius: Math.min(root.width,root.height) / 10
-        color: '#ee000000'
+        color: '#ee333333'
         border.width: 1
-        border.color: '#ffffff'
+        border.color: '#000000'
     }
     Column {
         id: col

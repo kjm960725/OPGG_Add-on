@@ -1,11 +1,11 @@
 ﻿import QtQuick 2.12
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.0
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import Riot 1.0
 import 'Components'
 import 'Fonts'
 import 'Pages'
-import QtWebEngine 1.8
+import QtWebEngine 1.10
 import Clipboard 1.0
 import Qt.labs.settings 1.1
 
@@ -14,7 +14,7 @@ MainWindow {
 
     Connections {
         target: challenge
-        onCurrentSummonerChanged: {
+        function onCurrentSummonerChanged() {
             if (Object.keys(challenge.currentSummoner).length)
                 lcu.getClientRegion(function(object,err,errStr){
                     if (err === 0)
@@ -26,10 +26,29 @@ MainWindow {
     }
 
     Connections {
+        target: lcu
+        function onErrorOccurred() {
+            switch(lcu.error) {
+            case LCU.NotRunningLeagueClient:
+                push.show(qsTr('LOL 클라이언트가 실행중이 아닙니다.'), qsTr('LOL 클라이언트가 실행되었나요?.'), 5000)
+                break;
+            case LCU.NotFoundLockfile:
+                push.show(qsTr('[오류:101] NotFoundLockFile'), qsTr('클라이언트와 연동이 안된다면 개발자에게 문의하여주세요.'), 15000)
+                break;
+            case LCU.LockfileOpenFailed:
+                push.show(qsTr('[오류:102] LockfileOpenFailed'), qsTr('클라이언트와 연동이 안된다면 개발자에게 문의하여주세요.'), 15000)
+                break;
+            case LCU.LockfileParseError:
+                push.show(qsTr('[오류:103] LockfileParseError'), qsTr('클라이언트와 연동이 안된다면 개발자에게 문의하여주세요.'), 15000)
+                break;
+            }
+        }
+    }
+
+    Connections {
         target: updateTool
-        onHasUpdateChanged: {
-            if (updateTool.hasUpdate)
-                askPopup.askUpdate()
+        function onHasUpdateChanged(hasUpdate) {
+            if (hasUpdate) askPopup.askUpdate()
         }
     }
 
@@ -211,14 +230,24 @@ MainWindow {
                     }
 
                     Timer {
-                        running: challenge.currentGameflowState === LCU.ChampSelect; repeat: true; interval: 500
+                        running: challenge.currentGameflowState === LCU.ChampSelect; repeat: true; interval: 1000
                         onTriggered: {
-                            teams.releaseChampSelectViews()
+                            switch(challenge.currentGameflowState) {
+                            case LCU.ChampSelect:
+                                teams.releaseChampSelectViews()
+                                break;
+                            case LCU.InProgress:
+
+                                break;
+                            default:
+                                break;
+                            }
+
                         }
                     }
                     Connections {
                         target: challenge
-                        onCurrentGameflowStateChanged: {
+                        function onCurrentGameflowStateChanged() {
                             switch(challenge.currentGameflowState) {
                             case LCU.ChampSelect:
                                 teams.releaseChampSelectViews()
@@ -227,6 +256,7 @@ MainWindow {
                                 teams.releaseGameSessionViews()
                                 break;
                             case LCU.Reconnect:
+
                                 break;
                             case LCU.EndOfGame:
                                 break;
@@ -256,7 +286,6 @@ MainWindow {
                 }
                 fontFamily: fonts.nanumR
                 eventPush: push
-                onUrlChanged: console.info('webView.urlChanged :',url)
                 onDownloadComplated: {
                     if (obs.isObserverFile(path)) {
                         obs.runProcess(path, function(exitCode){
@@ -267,10 +296,11 @@ MainWindow {
                         })
                     }
                 }
-
+//https://www.op.gg/summoner/userName=%EC%B2%AD%EC%82%B0%EA%B0%80%EB%A6%AC%EC%A4%91%EB%8F%85%EC%9E%90
+//com.stickyadstv.utils.Browser GDPR 2.0 - TCFAPI function cannot be found. _fw_gdpr: null
                 Connections {
                     target: challenge
-                    onCurrentGameflowStateChanged: {
+                    function onCurrentGameflowStateChanged() {
                         switch(challenge.currentGameflowState) {
                         case LCU.ChampSelect:
                             if (!settings.inChampSessionAction) break;

@@ -1,6 +1,6 @@
-﻿import QtQuick 2.12
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.12
+﻿import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 Popup {
     id: root
     width: col.width + (padding * 2)
@@ -33,7 +33,7 @@ Popup {
 //                        Qt.quit()
                     }
                 }
-                ListElement { type: 'Update.Spacer'}
+                ListElement { type: 'Update Spacer'}
                 ListElement {
                     name: qsTr('일반')
                     type: 'General'
@@ -41,7 +41,6 @@ Popup {
                         settingPageLoader.source = 'qrc:/Pages/GeneralSettingsPage.qml'
                     }
                 }
-
                 ListElement {
                     name: qsTr('자주 묻는 질문')
                     type: 'General'
@@ -61,7 +60,12 @@ Popup {
                 onClicked: {
                     trriger()
                 }
-                height: visible ? 40 : 0
+                height: {
+                    if (visible) {
+                        return String(type).includes('Spacer') ? 15 : 40
+                    }
+                    return 0
+                }
                 visible: String(type).includes('Update') ? updateTool.hasUpdate : true
 
                 scale: pressed ? 0.95 : 1

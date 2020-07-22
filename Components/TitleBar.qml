@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+﻿import QtQuick 2.15
 import QtGraphicalEffects 1.0
 import Riot 1.0
 

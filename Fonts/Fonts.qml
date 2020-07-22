@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.15
 
 Loader {
     readonly property string nanumB: nanumB.name

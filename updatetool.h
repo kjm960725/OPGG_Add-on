@@ -14,7 +14,7 @@ class UpdateTool : public QObject
     Q_PROPERTY(bool hasUpdate READ hasUpdate NOTIFY hasUpdateChanged)
     Q_PROPERTY(QString updateDetails READ updateDetails NOTIFY updateDetailsChanged)
 
-  public:
+public:
     explicit UpdateTool(QObject *parent = nullptr);
 
     enum ProcessState {
@@ -30,17 +30,17 @@ class UpdateTool : public QObject
     bool hasUpdate() const;
     QString updateDetails() const;
 
-  signals:
+signals:
     void stateChanged(ProcessState state);
     void hasUpdateChanged(bool hasUpdate);
     void updateDetailsChanged(const QString &updateDetails);
 
-  public slots:
+public slots:
     void updateCheckTimerStart(int msec);
     void checkUpdate();
     void startUpdate();
 
-  private slots:
+private slots:
     QString createUpdateBatFile() const;
     void setHasUpdate(bool hasUpdate);
     void setUpdateDetails(const QString &updateDetails);
@@ -48,7 +48,7 @@ class UpdateTool : public QObject
     void processFinished(int exitCode);
     void processError(QProcess::ProcessError error);
 
-  private:
+private:
     QTimer *mUpdateCheckTimer;
     ProcessState mState;
     bool mHasUpdate;

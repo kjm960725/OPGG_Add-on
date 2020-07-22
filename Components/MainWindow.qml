@@ -18,8 +18,8 @@ Window {
     property Component content
     property Component titleItem
 
-    onMinimumHeightChanged: if (height < minimumHeight) height = minimumHeight
-    onMinimumWidthChanged: if (width < minimumWidth) width = minimumWidth
+//    onMinimumHeightChanged: if (height < minimumHeight) height = minimumHeight
+//    onMinimumWidthChanged: if (width < minimumWidth) width = minimumWidth
 
     Rectangle {
         id: background
@@ -66,18 +66,18 @@ Window {
 
 
         MouseArea {
-            Timer {
-                id: nomalVisibilityTimer
-                running: mainWindow.visibility === 2
-                interval: 50
-                repeat: false
-            }
-            Timer {
-                id: maxVisibilityTimer
-                running: mainWindow.visibility === 4 || mainWindow.visibility === 5
-                interval: 50
-                repeat: false
-            }
+//            Timer {
+//                id: nomalVisibilityTimer
+//                running: mainWindow.visibility === 2
+//                interval: 50
+//                repeat: false
+//            }
+//            Timer {
+//                id: maxVisibilityTimer
+//                running: mainWindow.visibility === 4 || mainWindow.visibility === 5
+//                interval: 50
+//                repeat: false
+//            }
 
             anchors.fill: parent
             onPressed: {
@@ -85,7 +85,7 @@ Window {
                 previousY = mouseY
             }
             onMouseXChanged: {
-                if (nomalVisibilityTimer.running || maxVisibilityTimer.running) return
+//                if (nomalVisibilityTimer.running || maxVisibilityTimer.running) return
                 var dx = mouseX - previousX
                 if (mainWindow.visibility === 4 || mainWindow.visibility === 5) {
                     if (dx < 10 && dx > -10) return
@@ -98,7 +98,7 @@ Window {
 
             }
             onMouseYChanged: {
-                if ( nomalVisibilityTimer.running || maxVisibilityTimer.running) return
+//                if ( nomalVisibilityTimer.running || maxVisibilityTimer.running) return
                 var dy = mouseY - previousY
                 if (mainWindow.visibility === 4 || mainWindow.visibility === 5) {
                     if (dy < 10 && dy > -10) return
@@ -110,7 +110,7 @@ Window {
                 }
             }
 
-            onDoubleClicked: windowMaximize()
+//            onDoubleClicked: windowMaximize()
         }
 
 

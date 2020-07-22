@@ -1,4 +1,4 @@
-﻿import QtQuick 2.4
+﻿import QtQuick 2.15
 import Riot 1.0
 Item {
     id: root
@@ -163,6 +163,7 @@ Item {
 
                     } else if (inGameSession !== null && inGameSession[gameSessionTeamMap[team]] !== null) {
                         var teamObj = inGameSession[gameSessionTeamMap[team]]
+//                        console.warn('JSON : ',JSON.stringify(inGameSession))
                         var split = teamObj[index].summonerInternalName.split('_')
                         if (split.length === 3 && split[0] === 'bot') {
                             selectChampId = allChampInfos[split[1]].key
@@ -174,6 +175,7 @@ Item {
                                     break
                                 }
                             }
+//                            console.log(summonerName, selectChampId)
                         }
                     }
                     if (selectChampId === 0) return null

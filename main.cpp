@@ -29,12 +29,12 @@ void makeRiotJsonHeaderFromTxt(const QString &filePath, bool echo, bool headerAu
 void regQmlModules();
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QCoreApplication::setApplicationName("OPGG_Add-on");
     QCoreApplication::setOrganizationName("KJM960725");
-    QGuiApplication app(argc, argv);
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QtWebEngine::initialize();
+    QGuiApplication app(argc, argv);
 
     makeUserFolders();
     qInstallMessageHandler(LogToFile);
@@ -49,11 +49,12 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
+
     engine.rootContext()->setContextProperty("supportSsl", QSslSocket::supportsSsl());
     engine.rootContext()->setContextProperty("sslVersion", QSslSocket::sslLibraryVersionString());
-//    engine.rootContext()->setContextProperty("applicationPath", "file:"+ QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first());
     engine.rootContext()->setContextProperty("appDirPath", qApp->applicationDirPath());
     engine.rootContext()->setContextProperty("downloadPath", QString("file:%1").arg(QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).first()));
+    engine.rootContext()->setContextProperty("cachePath", QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
     engine.rootContext()->setContextProperty("challenge",&challenge);
     engine.rootContext()->setContextProperty("updateTool",challenge.updateTool());
     engine.rootContext()->setContextProperty("lcu",challenge.lcu());
@@ -61,6 +62,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("dragon",challenge.dataDragon());
     engine.rootContext()->setContextProperty("userFolerPath",userFolerPath);
     engine.rootContext()->setContextProperty("obs", challenge.observerFileManager());
+
     engine.load(url);
 
     return app.exec();
@@ -132,6 +134,7 @@ void LogToFile(QtMsgType type, const QMessageLogContext &context, const QString 
 //            file.flush();
 //            break;
 //        case QtInfoMsg:
+
 //            out << QString("[Info]\t%1\t%2\n").arg(curtime).arg(msg);
 //            file.flush();
 //            break;

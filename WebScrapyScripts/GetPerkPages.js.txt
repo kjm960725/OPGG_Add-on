@@ -1,4 +1,4 @@
-var perkPages = document.getElementsByClassName('perk-page-wrap');
+﻿var perkPages = document.getElementsByClassName('perk-page-wrap');
 var champName = document.getElementsByClassName('champion-stats-header-info__name')[0].innerText
 var result = new Array
 for (let i = 0; i < perkPages.length; ++i) 
@@ -10,8 +10,7 @@ for (let i = 0; i < perkPages.length; ++i)
     var sub = perkPage.getElementsByClassName('perk-page')[1]
     var subArr = sub.getElementsByTagName('img')[0].src.split('/')
     var imgs = perkPage.getElementsByTagName('img')
-    var object = 
-    {
+    var object = {
         name: 'OP.GG:' + champName + ':' + perkPageName.replace(/(\s*)/g, ""), 
         primaryStyleId: priArr[priArr.length-1].split('.')[0], 
         subStyleId: subArr[subArr.length-1].split('.')[0], 
