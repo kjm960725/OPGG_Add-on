@@ -1,12 +1,18 @@
 # OPGG_Add-on
 OP.GG와 롤 클라이언트를 연동 해 룬 복사, 자동 멀티 서치 등. OP.GG의 기능을 확장 한 Windows 프로그램입니다.
 
+
 ### 할 일 노트
   - Overlay 방식으로 인게임 내에 전적 표시 구현
-  - 내전/대회 방송용 인터페이스 / 기능 구현
   - 아이템 복사 구현
+  - 일부 PC에서 롤 클라이언트 실행이 감지되지 않는 문제 해결
+  - 일부 PC에서 Window창 좌표 이동이 원활하지 않는 문제 해결
+  - 일반게임에서 상대편의 챔피언을 알 수 없는 문제 해결
+  - 다국어 번역
+  - 듀오 추적 기능 구현
 
-### 사용언어 : C/C++, QML, JS 
+
+### 사용언어 : C++, QML, JS 
 
 
 ### 배포판 다운로드 : https://storage.googleapis.com/opgg-add-on-repository/OPGG_Add-on_Installer.exe
