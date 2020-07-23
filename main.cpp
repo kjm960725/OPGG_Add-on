@@ -13,6 +13,7 @@
 #include <QtWebEngine>
 #include "qmlclipboardadapter.h"
 #include <QSslSocket>
+#include "webscrapforopgg.h"
 //#include "competuser.h"
 //#include "competteam.h"
 //#include "competmanager.h"
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("lcu",challenge.lcu());
     engine.rootContext()->setContextProperty("riot",challenge.riot());
     engine.rootContext()->setContextProperty("dragon",challenge.dataDragon());
+    engine.rootContext()->setContextProperty("opggScrap",challenge.webScrapForOPGG());
     engine.rootContext()->setContextProperty("userFolerPath",userFolerPath);
     engine.rootContext()->setContextProperty("obs", challenge.observerFileManager());
 
@@ -76,6 +78,7 @@ void regQmlModules()
     qmlRegisterType<Challenge>("Riot",1,0,"Challenge");
     qmlRegisterType<QmlClipboardAdapter>("Clipboard", 1, 0, "Clipboard");
     qmlRegisterType<ObserverFileManager>("Riot", 1, 0, "ObserverFileManager");
+    qmlRegisterType<WebScrapForOPGG>("Riot", 1,0, "WebScrapForOPGG");
 
     qRegisterMetaType<riot::LCU::GameflowState>("GameflowState");
 }

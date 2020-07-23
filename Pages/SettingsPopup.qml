@@ -66,7 +66,10 @@ Popup {
                     }
                     return 0
                 }
-                visible: String(type).includes('Update') ? updateTool.hasUpdate : true
+                visible: {
+                    if (updateTool == null) return false
+                    return String(type).includes('Update') ? updateTool.hasUpdate : true
+                }
 
                 scale: pressed ? 0.95 : 1
                 background: Rectangle {

@@ -579,17 +579,9 @@ void LCU::run()
     while (!mThreadQuit)
     {
         try {
-            QByteArray commandLine = getProcessCommandLine("LeagueClientUx.exe");
-
-            auto keyMap = parseCommandLineByWMIC(commandLine);
-            QString installPath = QString(keyMap.value("install-directory")).replace("\\","/");
-            if (installPath.isNull()){
-                if (isRunningProcessByWMIC(commandLine)) {
-                    throw LackOfAuthority;
-                } else {
-                    throw NotRunningLeagueClient;
-                }
-            }
+            QString installPath = getLCUPathFromProcess();
+            if (installPath.isNull())
+                throw NotRunningLeagueClient;
 
             QDir dir(installPath);
             QStringList dirEntry = dir.entryList(QDir::Files);
@@ -697,21 +689,35 @@ void LCU::dealay(int msec)
     loop.exec();
 }
 
-QByteArray LCU::getProcessCommandLine(const QString &name)
+QString LCU::getLCUPathFromProcess()
 {
     QProcess process;
-    process.start(QString("wmic.exe /OUTPUT:STDOUT PROCESS WHERE name='%1' GET CommandLine").arg(name), QIODevice::ReadWrite);
+    process.start("wmic.exe /OUTPUT:STDOUT PROCESS WHERE name='LeagueClientUx.exe' GET CommandLine");
     process.waitForFinished();
 
+
+    const QByteArray read = process.readAllStandardOutput();
     QProcess::ExitStatus exitStatus = process.exitStatus();
     int exitCode = process.exitCode();
 
     if (exitStatus == QProcess::CrashExit) {
-        qWarning() << "LCU::getProcessCommandLine - wmic crash" << exitCode;
-        return QByteArray();
+        qWarning() << "LCU::getLCUPathFromProcess - wmic crash" << exitCode;
+        return QString();
     }
 
-    return process.readAllStandardOutput();
+    auto keyMap = parseCommandLineByWMIC(read);
+
+    return QString(keyMap.value("install-directory")).replace("\\","/");
+//    const QStringList args = QString(read).remove(QRegExp("[\r\n\"]")).split(" --");
+//    QString installPath;
+//    const QString findOption = "install-directory=";
+//    for (auto arg : args) {
+//        if (arg.contains(findOption)) {
+//            installPath = QString(arg).remove(findOption).replace("\\","/");
+//            break;
+//        }
+//    }
+
 }
 
 QByteArray LCU::createAuthorizationHeader(const QString &password)
@@ -719,11 +725,6 @@ QByteArray LCU::createAuthorizationHeader(const QString &password)
     QString credentials = QString("riot:%2").arg(password);
     QString credentialsBase64 = credentials.toLocal8Bit().toBase64();
     return QString("Basic %1").arg(credentialsBase64).toLocal8Bit();
-}
-
-bool LCU::isRunningProcessByWMIC(const QByteArray &data)
-{
-    return data.toLower().contains("commandline");
 }
 
 

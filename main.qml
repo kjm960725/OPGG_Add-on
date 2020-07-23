@@ -32,6 +32,9 @@ MainWindow {
             case LCU.NotRunningLeagueClient:
                 push.show(qsTr('LOL 클라이언트가 실행중이 아닙니다.'), qsTr('LOL 클라이언트가 실행되었나요?.'), 5000)
                 break;
+            case LCU.LackOfAuthority:
+                askPopup.askRestartAdministrator()
+                break;
             case LCU.NotFoundLockfile:
                 push.show(qsTr('[오류:101] NotFoundLockFile'), qsTr('클라이언트와 연동이 안된다면 개발자에게 문의하여주세요.'), 15000)
                 break;
@@ -92,6 +95,21 @@ MainWindow {
                  function(accept){
                      if (accept) updateTool.startUpdate()
                  })
+        }
+
+        function askRestartAdministrator() {
+            acceptButton.text = qsTr('재시작')
+            acceptButton.contentItem.color = '#ff0000'
+            acceptButton.background.border.color = '#ff0000'
+            closeButton.text = qsTr('아니오')
+            show(qsTr('관리자 권한으로 실행'),
+                 qsTr('LOL 클라이언트가 관리자 권한으로 실행되었기 때문에 이 프로그램도 관리자 권한으로 실행되어야 원활한 동작이 가능합니다.'),
+                 function(accept){
+                     if (accept) challenge.restartAdministrator()
+                 })
+        }
+        Component.onCompleted: {
+
         }
     }
 
@@ -200,8 +218,14 @@ MainWindow {
                         function clearViews() { for (var i = 0; i < count; ++i) itemAt(i).clear(); }
 
                         ChampSelectView {
-                            iconDirPath: dragon.getDataDragonPath() + '/' + dragon.version + '/img'
-                            allChampInfos: dragon.allChampionsInfo
+                            iconDirPath: {
+                                if (dragon == null) return ''
+                                return dragon.getDataDragonPath() + '/' + dragon.version + '/img'
+                            }
+                            allChampInfos: {
+                                if (dragon == null) return []
+                                dragon.allChampionsInfo
+                            }
                             anchors.left: parent.left
                             anchors.right: parent.right
                             fontFamily: fonts.nanumR
@@ -230,8 +254,13 @@ MainWindow {
                     }
 
                     Timer {
-                        running: challenge.currentGameflowState === LCU.ChampSelect; repeat: true; interval: 1000
+                        running: {
+                            if (challenge == null) return false
+                            return challenge.currentGameflowState === LCU.ChampSelect;
+                        }
+                        repeat: true; interval: 1000
                         onTriggered: {
+                            if (challenge == null) return
                             switch(challenge.currentGameflowState) {
                             case LCU.ChampSelect:
                                 teams.releaseChampSelectViews()
@@ -296,8 +325,7 @@ MainWindow {
                         })
                     }
                 }
-//https://www.op.gg/summoner/userName=%EC%B2%AD%EC%82%B0%EA%B0%80%EB%A6%AC%EC%A4%91%EB%8F%85%EC%9E%90
-//com.stickyadstv.utils.Browser GDPR 2.0 - TCFAPI function cannot be found. _fw_gdpr: null
+
                 Connections {
                     target: challenge
                     function onCurrentGameflowStateChanged() {

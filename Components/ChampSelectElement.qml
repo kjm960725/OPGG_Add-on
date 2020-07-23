@@ -13,7 +13,7 @@ Rectangle {
     property bool isAllyAction: false
 
     property var summonerChampsRateInfo: {
-        if (root.summonerEnalbe) challenge.getChampRateByOPGG(root.summonerName, function(object){
+        if (root.summonerEnalbe) opggScrap.getChampRateByOPGG(root.summonerName, function(object){
             summonerChampsRateInfo = object
         })
         return null

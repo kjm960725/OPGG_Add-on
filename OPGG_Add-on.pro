@@ -14,19 +14,15 @@ QMAKE_CXXFLAGS_WARN_ON-= -w34100
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        challenge.cpp \
-#        competconfig.cpp \
-#        competmacth.cpp \
-#        competmanager.cpp \
-#        competteam.cpp \
-#        competuser.cpp \
-        datadragon.cpp \
-        lcu.cpp \
-        main.cpp \
-        observerfilemanager.cpp \
-        qmlclipboardadapter.cpp \
-        riot.cpp \
-        updatetool.cpp
+    webscrapforopgg.cpp \
+    challenge.cpp \
+    datadragon.cpp \
+    lcu.cpp \
+    main.cpp \
+    observerfilemanager.cpp \
+    qmlclipboardadapter.cpp \
+    riot.cpp \
+    updatetool.cpp
 
 RC_ICONS = $$PWD/Icons/OPGG.ico
 RESOURCES += qml.qrc
@@ -86,12 +82,8 @@ HEADERS += \
     RiotJson/TournamentPhaseDto.h \
     RiotJson/Translation.h \
     RiotJson/_RiotJsonInclude.h \
+    webscrapforopgg.h \
     challenge.h \
-#    competconfig.h \
-#    competmacth.h \
-#    competmanager.h \
-#    competteam.h \
-#    competuser.h \
     datadragon.h \
     lcu.h \
     observerfilemanager.h \

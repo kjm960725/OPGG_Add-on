@@ -25,6 +25,7 @@ public:
     enum ConnectionError {
         NoError,
         NotRunningLeagueClient,
+        LackOfAuthority,
         NotFoundLockfile,
         LockfileOpenFailed,
         LockfileParseError
@@ -114,8 +115,9 @@ private:
     bool mThreadQuit = false;
 
     static void dealay(int msec);
-    static QString getLCUPathFromProcess();
+    static QByteArray getProcessCommandLine(const QString &name);
     static QByteArray createAuthorizationHeader(const QString &password);
+    static bool isRunningProcessByWMIC(const QByteArray &data);
     static QMap<QString,QString> parseCommandLineByWMIC(const QByteArray &data);
 
     mutable QMutex mMutex;

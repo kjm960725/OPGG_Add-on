@@ -66,48 +66,24 @@ Window {
 
 
         MouseArea {
-//            Timer {
-//                id: nomalVisibilityTimer
-//                running: mainWindow.visibility === 2
-//                interval: 50
-//                repeat: false
-//            }
-//            Timer {
-//                id: maxVisibilityTimer
-//                running: mainWindow.visibility === 4 || mainWindow.visibility === 5
-//                interval: 50
-//                repeat: false
-//            }
-
             anchors.fill: parent
             onPressed: {
                 previousX = mouseX
                 previousY = mouseY
             }
-            onMouseXChanged: {
-//                if (nomalVisibilityTimer.running || maxVisibilityTimer.running) return
-                var dx = mouseX - previousX
+            onPositionChanged: {
                 if (mainWindow.visibility === 4 || mainWindow.visibility === 5) {
-                    if (dx < 10 && dx > -10) return
-                    const beforeLocation = mouseX / mainWindow.width
+                    var dx = mouseX - previousX
+                    var dy = mouseY - previousY
+                    if ((dx < 10 && dx > -10) && (dy < 10 && dy > -10))
+                        return
+                    const beforeWidth = mainWindow.width
                     mainWindow.showNormal()
-                    previousX = mainWindow.width * beforeLocation
-                } else {
-                    mainWindow.setX(mainWindow.x + dx)
+                    previousX = previousX * (mainWindow.width / beforeWidth)
                 }
-
-            }
-            onMouseYChanged: {
-//                if ( nomalVisibilityTimer.running || maxVisibilityTimer.running) return
-                var dy = mouseY - previousY
-                if (mainWindow.visibility === 4 || mainWindow.visibility === 5) {
-                    if (dy < 10 && dy > -10) return
-                    const beforeLocation = mouseX / mainWindow.width
-                    mainWindow.showNormal()
-                    previousX = mainWindow.width * beforeLocation
-                } else {
-                    mainWindow.setY(mainWindow.y + dy)
-                }
+                var pos = challenge.getMousePos()
+                mainWindow.setX(pos.x - previousX)
+                mainWindow.setY(pos.y - previousY)
             }
 
 //            onDoubleClicked: windowMaximize()

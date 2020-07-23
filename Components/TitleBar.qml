@@ -170,9 +170,13 @@ Item {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 width: height
-                source: challenge.currentSummoner.profileIconId !== undefined
-                              ? dragon.getDataDragonPath() + '/' + dragon.version + '/img/profileicon/' + challenge.currentSummoner.profileIconId +'.png'
-                              : ''
+                source: {
+                    if (challenge == null || dragon == null) return ''
+                    if (challenge.currentSummoner.profileIconId !== undefined) {
+                        return dragon.getDataDragonPath() + '/' + dragon.version + '/img/profileicon/' + challenge.currentSummoner.profileIconId +'.png'
+                    }
+                    return ''
+                }
                 layer.enabled: true
                 layer.effect: OpacityMask {
                     maskSource: Item {
@@ -194,9 +198,13 @@ Item {
                 anchors.left: summonerIconImg.right
                 anchors.leftMargin: 5
                 anchors.verticalCenter: parent.verticalCenter
-                text: challenge.currentSummoner.displayName !== undefined
-                      ? challenge.currentSummoner.displayName
-                      : ''
+                text: {
+                    if (challenge == null) return ''
+                    if (challenge.currentSummoner.displayName !== undefined) {
+                        return challenge.currentSummoner.displayName
+                    }
+                    return ''
+                }
                 font.family: fonts.nanumR
                 style: Text.Outline
                 color: '#ffffff'
@@ -216,6 +224,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 text: {
+                    if (challenge == null || lcu == null) return ''
                     switch(challenge.currentGameflowState) {
                     case LCU.None:
                         if (lcu.isConnected)

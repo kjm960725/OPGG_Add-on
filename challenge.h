@@ -14,6 +14,7 @@
 
 using namespace riot;
 
+class WebScrapForOPGG;
 class QNetworkAccessManager;
 class Challenge : public QObject
 {
@@ -27,6 +28,8 @@ public:
     Q_INVOKABLE static QString readFile(const QString &path);
     Q_INVOKABLE static bool clearWebCache();
     Q_INVOKABLE static bool clearWebCookie();
+    Q_INVOKABLE static QPoint getMousePos();
+    Q_INVOKABLE static void restartAdministrator();
 
     QNetworkAccessManager *client() const;
     UpdateTool *updateTool() const;
@@ -34,14 +37,10 @@ public:
     LCU *lcu() const;
     DataDragon *dataDragon() const;
     ObserverFileManager *observerFileManager() const;
+    WebScrapForOPGG *webScrapForOPGG() const;
 
     LCU::GameflowState currentGameflowState() const;
     QJsonObject currentSummoner() const;
-
-    Q_INVOKABLE void getChampRateByOPGG(const QString &summonerName, const QJSValue &callback) const;
-
-
-
 
 signals:
     void currentGameflowStateChanged();
@@ -60,6 +59,7 @@ private:
     QJsonObject mCurrentSummoner;
     void setCurrentSummoner(const QJsonObject &currentSummoner);
 
+    WebScrapForOPGG *mWebScrapForOPGG;
     UpdateTool *mUpdateTool;
     QJSEngine *mJSEngine;
     QNetworkAccessManager *mClient;
