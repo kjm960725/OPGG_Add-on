@@ -17,6 +17,9 @@ OP.GG와 롤 클라이언트를 연동 해 룬 복사, 자동 멀티 서치 등.
 1. QT 5.15 (프레임워크)
 2. MSVC 2019 32Bit (컴파일러)
 
+### 유지 보수 
+- updatetool.h/cpp : QT Installer Framework 기반의 Online Installer용 자동 업데이트 기능
+
 ### 외부 API
 - riot.h/cpp : [Riot API](https://developer.riotgames.com/apis) > 라이엇 서버 연동 (미사용)
 - lcu.h/cpp : [LCU API](https://riot-api-libraries.readthedocs.io/en/latest/lcu.html) > 롤 클라이언트 연동
@@ -24,9 +27,6 @@ OP.GG와 롤 클라이언트를 연동 해 룬 복사, 자동 멀티 서치 등.
 
 ### 외부 라이브러리
 - 3rdparty/QGumboParser : [gumbo-parser](https://github.com/google/gumbo-parser) > C++ HTML Parser
-
-### 유지 보수
-- updatetool.h/cpp : QT Installer Framework 기반의 Online Installer용 자동 업데이트 기능
 
 # 핵심 기능
 - op.gg 챔피언 분석페이지의 룬페이지를 롤 클라이언트로 복사
