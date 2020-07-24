@@ -23,12 +23,12 @@ OP.GG와 롤 클라이언트를 연동 해 룬 복사, 자동 멀티 서치 등.
 ### 유지 보수
 - updatetool.h/cpp : QT Installer Framework 기반의 Online Installer용 자동 업데이트 도구
 
-### 외부 API 연동 (Riot 공식)
+### Riot API 모듈
 - riot.h/cpp : [Riot API](https://developer.riotgames.com/apis) > 라이엇 서버 연동 (미사용)
 - lcu.h/cpp : [LCU API](https://riot-api-libraries.readthedocs.io/en/latest/lcu.html) > 롤 클라이언트 연동
 - datadragon.h/cpp : [Data Dragon API](https://developer.riotgames.com/docs/lol#data-dragon) > 롤 정적 데이터 API
 
-### 제 3자 라이브러리
+### 외부 라이브러리
 - 3rdparty/QGumboParser : [gumbo-parser](https://github.com/google/gumbo-parser) > C++ HTML Parser
 
 # 핵심 기능
