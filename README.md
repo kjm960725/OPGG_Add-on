@@ -18,7 +18,7 @@ OP.GG와 롤 클라이언트를 연동 해 룬 복사, 자동 멀티 서치 등.
 2. MSVC 2019 32Bit (컴파일러)
 
 ### 유지 보수 
-- updatetool.h/cpp : QT Installer Framework 기반의 Online Installer용 자동 업데이트 기능
+- updatetool.h/cpp : QT Installer Framework 기반의 Online Installer용 자동 업데이트 도구
 
 ### 외부 API
 - riot.h/cpp : [Riot API](https://developer.riotgames.com/apis) > 라이엇 서버 연동 (미사용)
